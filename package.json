@@ -5,13 +5,16 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "gh-pages -d dist"
   },
+  "homepage": "https://gseiten.io/jsexplorer",
   "dependencies": {
     "@jeremyhamm/vue-slider": "^0.2.0",
     "bulma": "^0.8.0",
     "core-js": "^3.6.4",
     "font-awesome": "^4.7.0",
+    "gh-pages": "^2.2.0",
     "monaco-editor-vue": "^1.0.9",
     "monaco-editor-webpack-plugin": "^1.9.0",
     "prismjs": "^1.19.0",

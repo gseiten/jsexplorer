@@ -25,6 +25,9 @@ Vue.use(VueCodemirror);
 import splitPane from 'vue-splitpane'
 Vue.component('split-pane', splitPane);
 
+import VueParticles from 'vue-particles'
+Vue.use(VueParticles)
+
 Vue.config.productionTip = false
 
 new Vue({

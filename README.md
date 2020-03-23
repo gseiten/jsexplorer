@@ -1,4 +1,4 @@
-# jsexplorer
+# kludge
 
 ## Project setup
 ```

@@ -1,11 +1,11 @@
 
 <template>
-    <div class="has-background-dark" style="">
+    <div class="has-background-black-bis" style="">
 
-        <nav class="navbar is-transparent is-fixed is-dark" style="z-index: 100">
+        <nav class="navbar is-transparent is-fixed has-background-black-bis" style="z-index: 100">
           <div class="navbar-brand">
             <a class="navbar-item" href="#">
-              <img src="../assets/kludge.png" alt="Kludge" class="image" >
+              <img src="../assets/kludge1.png" alt="Kludge" style="width:40px; min-height:40px">
             </a>
             <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
               <span></span>

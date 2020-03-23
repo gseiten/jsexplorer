@@ -23,7 +23,7 @@ import 'codemirror/mode/javascript/javascript.js';
 import 'codemirror/theme/monokai.css';
 Vue.use(VueCodemirror);
 
-import splitPane from 'vue-splitpane'
+import splitPane from 'vue-splitpane';
 Vue.component('split-pane', splitPane);
 
 import VueParticles from 'vue-particles'
@@ -32,6 +32,13 @@ Vue.use(VueParticles);
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 Vue.component("v-select", vSelect);
+
+import VTooltip from 'v-tooltip';
+Vue.use(VTooltip);
+
+import PerfectScrollbar from 'vue2-perfect-scrollbar';
+import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css';
+Vue.use(PerfectScrollbar);
 
 Vue.config.productionTip = false
 

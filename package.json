@@ -11,18 +11,20 @@
   "homepage": "https://gseiten.io/jsexplorer",
   "dependencies": {
     "@jeremyhamm/vue-slider": "^0.2.0",
+    "axios": "^0.19.2",
     "bulma": "^0.8.0",
     "core-js": "^3.6.4",
     "font-awesome": "^4.7.0",
     "gh-pages": "^2.2.0",
-    "monaco-editor-vue": "^1.0.9",
     "monaco-editor-webpack-plugin": "^1.9.0",
     "prismjs": "^1.19.0",
     "vue": "^2.6.11",
     "vue-codemirror": "^4.0.6",
     "vue-prism-editor": "^0.5.1",
     "vue-router": "^3.1.6",
-    "vue-splitpane": "^1.0.6"
+    "vue-select": "^3.9.4",
+    "vue-splitpane": "^1.0.6",
+    "vuex": "^3.1.3"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.12.1",

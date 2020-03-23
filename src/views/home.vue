@@ -2,10 +2,10 @@
 <template>
     <div class="has-background-dark" style="">
 
-        <nav class="navbar is-transparent is-fixed is-dark">
+        <nav class="navbar is-transparent is-fixed is-dark" style="z-index: 100">
           <div class="navbar-brand">
             <a class="navbar-item" href="#">
-              <img src="../assets/js5.png" alt="JS Explorer: Debug JavaScript to the core">
+              <img src="../assets/kludge.png" alt="Kludge" class="image" >
             </a>
             <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
               <span></span>
@@ -16,14 +16,14 @@
 
           <div id="navbarExampleTransparentExample" class="navbar-menu">
             <div class="navbar-start">
-              <a class="navbar-item" href="#">
-                Home
-              </a>
-              <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link" href="#">
-                  Features
+                <a class="navbar-item">
+                    <v-select 
+					style="min-width: 200px" 
+					v-model="selectedLanguage" 
+					:options="['JavaScript', 'Python']"
+				>	
+					</v-select>
                 </a>
-              </div>
             </div>
 
             <div class="navbar-end">
@@ -69,7 +69,25 @@
         name: "home",
         components: {
 
-        }
+		},
+		data(){
+			return {
+				selectedLanguage: "JavaScript",
+			}
+		},
+		methods: {
+		
+		},
+		watch: {
+			selectedLanguage(){
+				this.$store.commit('changeSelectedLanguage', this.selectedLanguage)
+			}
+		},
+		created() {
+			this.$store.commit('changeSelectedLanguage', this.selectedLanguage)
+		},
+
+
     }
 </script>
 

@@ -11,12 +11,13 @@
                 <div class="is-block">
                     <slider
                         :width="300"
-                        format="push"
+                        format="overlay"
                         direction="left"
                         :opacity="0.15"
                         :links="[
-                        {'id': 1, 'text': 'Debug', 'url': ''},
-                        {'id': 2, 'text': 'Learn', 'url': ''} ]">
+                            {'id': 1, 'text': 'Analyze', 'url': ''},
+                            {'id': 2, 'text': 'Learn', 'url': ''},
+                        ]">
                     </slider> 
                 </div>
 
@@ -37,33 +38,33 @@
 
                     <nav class="navbar has-background-black-bis" role="navigation" aria-label="main navigation">
                         <div class="navbar-brand">
-                            <div class="navbar-item">
+                            <div class="navbar-item is-paddingless">
                                 <div class="buttons">
-                                    <div class="button has-background-black-bis is-dark" @click="execute()" >
+                                    <div class="button is-dark is-small" @click="execute()" >
                                         <span class="icon">
                                             <i class="fas fa-play"></i>
                                         </span>
-                                        <span>Run</span>
+                                        <span class="is-size-6">Run</span>
                                     </div>
 
-                                    <div class="button is-dark has-background-black-bis">
+                                    <div class="button is-dark is-small">
                                         <span class="icon">
                                             <i class="fas fa-save"></i>
                                         </span>
-                                        <span>Save</span>
+                                        <span class="is-size-6">Save</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="navbar-end">
-                            <div class="navbar-item">
+                            <div class="navbar-item is-paddingless">
                                 <div class="buttons">
-                                    <div class="button is-dark has-background-black-bis" @click="resetResult()">
+                                    <div class="button is-dark is-small" @click="resetResult()">
                                         <span class="icon">
                                             <i class="fas fa-trash"></i>
                                         </span>
-                                        <span>Clear</span>
+                                        <span class="is-size-6">Clear</span>
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +91,13 @@
                             <template slot="paneR">
                                 <perfect-scrollbar>
                                     <div class="paneR has-text-success">
-                                        {{ result }}
+                                        <!-- {{ result }} -->
+                                        <div class="list is-hoverable has-background-black">
+                                            <div class="list-item has-text-light" v-for="i in result" :key="i">
+                                                {{i}}
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </perfect-scrollbar>
                             </template>
@@ -130,6 +137,10 @@
                             </div>
                         </div>
                     </nav>
+                </div>
+
+                <div class="section subtitle is-3 has-text-light has-background-black-ter">
+                    Cyclomatic Complexity
                 </div>
                 
 
@@ -171,13 +182,15 @@
         data() {
             return {
                 lang: "javascript",
-                result: "",
+                result: [],
                 error: "",
                 code: `
-let arr = [1,2,3,4,5];
-for(let i in arr){
-    console.log(arr[i])
-}`,
+let arr = Array(20).fill().map((_, i) => i * i);
+for(var i in arr){
+    let random = Math.random().toString(36).substr(2, 9);
+    console.log(random);
+}
+`,
                 cmOptions: {
                     tabSize: 4,
                     mode: 'text/javascript',
@@ -212,15 +225,16 @@ for(let i in arr){
                         'Content-Type': 'application/json',
                     }
                 }).then(response => {
-                    this.result = response.data.result;
+                    this.result.push(response.data.result);
                     this.error = response.data.error;
-                    console.log(response.data)
+                    console.log(this.result)
+                    console.log(response.data.result)
                 })
 
             },
 
             resetResult: function(){
-                this.result = "";
+                this.result.length = 0;
             },
 
 

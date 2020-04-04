@@ -1,7 +1,7 @@
 
 <template>
 
-    <div class="has-background-black-bis has-text-light" style="height: 100vh">
+    <div class="has-background-black-bis has-text-light" style="min-height: 100vh; height: 100%;">
 
 
         <div class="columns">
@@ -74,35 +74,44 @@
 
                     <div style="height: 40em">
 
-                        <split-pane :min-percent='10' :default-percent='50' split="vertical">
+                        <split-pane :min-percent='10' :default-percent='70' split="vertical">
 
                             <template slot="paneL">
+
                                 <editor
-                                    @keyup.ctrl.enter.exact.native="execute()"
                                     class="has-background-black-bis"
+                                    @keyup.ctrl.enter.exact.native="execute()"
                                     ref='myEditor'
                                     v-model="code"
                                     @init="editorInit"
                                     :lang="lang"
                                     theme="monokai">
                                 </editor>
+
                             </template>
 
                             <template slot="paneR">
-                                <perfect-scrollbar>
-                                    <div class="paneR has-text-success">
-                                        <!-- {{ result }} -->
-                                        <div class="list is-hoverable has-background-black">
-                                            <div class="list-item has-text-light" v-for="i in result" :key="i">
-                                                {{i}}
-                                            </div>
+
+                                    <div class="list is-hoverable has-background-black-bis resContainer">
+                                        <div
+                                            style="border-bottom: 1px solid #202020"
+                                            class="list-item has-text-success" 
+                                            v-for="(el, index) in result" 
+                                            v-bind:key="index">
+                                            {{ el }}
                                         </div>
 
+                                        <div
+                                            v-if="error != ''"
+                                            class="list-item has-text-light"
+                                            style="background-color: rgba(255,0,0,0.2)">
+                                            {{ error }}
+                                        </div>
                                     </div>
-                                </perfect-scrollbar>
+                            
                             </template>
 
-                          </split-pane>
+                        </split-pane>
                     
                     </div>
 
@@ -110,39 +119,76 @@
                 </div>
 
 
-                <div class="has-background-black" style="margin-top: 0.3em; padding: 1em">
-                    <nav class="level">
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="title has-text-light">3,456</p>
-                                <p class="heading has-text-light">Tweets</p>
+                <!-- <div class="content" v-if="fileInfo.length">
+                    The file has {{ fileInfo.length }} functions.
+                    <div class="list is-hoverable">
+                        <div
+                            style="border-bottom: 1px solid #202020"
+                            class="list-item has-background-black-bis has-text-light" 
+                            v-for="(el, index) in fileInfo" 
+                            :key="index">
+
+                                <div class="is-italic">{{ index+1 }}. {{ el.name }}</div>
+                                <div v-if="el.params.length">
+                                    It takes {{ el.params.length }} parameters.
+                                </div>
+                                <div v-if="el.isEmpty">
+                                    It is empty.
+                                </div>
+                                <div v-if="el.isGenerator">
+                                    it is a generator.
+                                </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="container is-fluid is-paddingless" style="margin-top: 5px">
+                <div v-if="fileInfo.length" class="box has-background-black">
+                    <div class="content" style="margin-bottom: 0">
+                        <span class="subtitle is-4 has-text-light">
+                            Metrics 
+                        </span>
+                        <p class="has-text-light">
+                            There are {{ fileInfo.length }} function(s) in this file.
+                        </p>
+                    </div>
+                    <b-collapse :open="false" position="is-bottom" aria-id="contentIdForA11y1">
+                        <a slot="trigger" slot-scope="props" aria-controls="contentIdForA11y1">
+                            <b-icon :icon="!props.open ? 'caret-down' : 'caret-up'"></b-icon>
+                            {{ !props.open ? 'Show detail' : 'Hide detail' }}
+                        </a>
+                        <div class="list">
+                            <div
+                                type="I"
+                                style="border-bottom: 1px solid #202020; border-radius: 0"
+                                class="list-item has-background-black-bis has-text-light" 
+                                v-for="(el, index) in fileInfo" 
+                                :key="index">
+
+                                    <div class="is-italic" v-if="el.name">
+                                        {{ el.name }}
+                                    </div>
+                                    <div class="is-italic" v-else>
+                                        It's an IIFE.
+                                    </div>
+                                    <div v-if="el.params.length">
+                                        It has {{ el.params.length }} parameters.
+                                    </div>
+                                    <div v-if="el.variables">
+                                        Has {{ el.variables }} local variable(s).
+                                    </div>
+                                    <div v-if="el.isEmpty">
+                                        It is empty.
+                                    </div>
+                                    <div v-if="el.isGenerator">
+                                        It is a generator.
+                                    </div>
                             </div>
                         </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="title has-text-light">123</p>
-                                <p class="heading has-text-light">Following</p>
-                            </div>
-                        </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="title has-text-light">456K</p>
-                                <p class="heading has-text-light">Followers</p>
-                            </div>
-                        </div>
-                        <div class="level-item has-text-centered">
-                            <div>
-                                <p class="title has-text-light">789</p>
-                                <p class="heading has-text-light">Likes</p>
-                            </div>
-                        </div>
-                    </nav>
+                    </b-collapse>
+                </div>
                 </div>
 
-                <div class="section subtitle is-3 has-text-light has-background-black-ter">
-                    Cyclomatic Complexity
-                </div>
-                
 
 
             </div>
@@ -159,6 +205,8 @@
 
     import axios from 'axios';
     import Slider from '@jeremyhamm/vue-slider';
+    // import 'bulma-extensions/bulma-accordion/dist/css/bulma-accordion.min.css';
+    
 
     export default {
         name: "panel",
@@ -184,13 +232,26 @@
                 lang: "javascript",
                 result: [],
                 error: "",
+                fileInfo: [],
+
+//                 code: `
+// let arr = Array(20).fill().map((_, i) => i * i);
+// for(var i in arr){
+//     let random = Math.random().toString(36).substr(2, 9);
+//     console.log(random);
+// }
+// `,
+
                 code: `
-let arr = Array(20).fill().map((_, i) => i * i);
-for(var i in arr){
-    let random = Math.random().toString(36).substr(2, 9);
-    console.log(random);
+function abc(m,n){
+    console.log("shubham");
 }
-`,
+
+function def(p,r){
+    console.log("bhardwaj");
+}`,
+
+
                 cmOptions: {
                     tabSize: 4,
                     mode: 'text/javascript',
@@ -206,36 +267,60 @@ for(var i in arr){
         methods: {
 
             editorInit: function () {
+
+                require("brace/ext/beautify")
                 require('brace/ext/language_tools') //language extension prerequsite...
                 require('brace/mode/html')
                 require('brace/mode/javascript')    //language
                 require('brace/mode/python')
                 require('brace/mode/less')
                 require('brace/theme/chrome')
+                require('brace/theme/vibrant_ink')
                 require('brace/theme/monokai')
                 require('brace/snippets/javascript') //snippet
+                
             },
 
             execute: function(){
-                 // this.result = Function('"use strict";return (' + this.code + ')')();
-                //  this.result = eval(this.code)
 
-                axios.post('/api/js', {'code': this.code}, {
-                    headers: {
-                        'Content-Type': 'application/json',
+                axios.post('/api/js', 
+                    {
+                        'code': this.code,
+                        'lang': this.lang
+                    },
+                    { 
+                        headers: { 
+                            'Content-Type': 'application/json',
                     }
                 }).then(response => {
-                    this.result.push(response.data.result);
+
+                    if(response.data.result != ""){
+                        this.result.push(response.data.result);}
                     this.error = response.data.error;
-                    console.log(this.result)
-                    console.log(response.data.result)
-                })
+
+                    this.fileInfo = [];
+                    this.fileInfo = response.data.fileInfo;
+
+                }).catch(function(error) {
+                    alert(error);
+                });
 
             },
 
             resetResult: function(){
-                this.result.length = 0;
+
+                this.result = [];
+                this.error = "";
+
             },
+
+            scrollToEnd: function(){
+
+                var container = document.querySelector('.resContainer');
+                var scrollHeight = container.scrollHeight;
+                container.scrollTop = scrollHeight;
+                
+            }
 
 
         },
@@ -246,7 +331,14 @@ for(var i in arr){
             var editor = this.$refs.myEditor.editor;
             editor.setShowPrintMargin(false);
             editor.setFontSize("22px");
+            this.scrollToEnd();
 
+        },
+
+        updated(){
+
+            this.scrollToEnd();
+        
         }
 
 
@@ -257,19 +349,23 @@ for(var i in arr){
 <style>
 
 .splitter-pane-resizer {
-    /* background-color: #4a4a4a !important; */
     background-color: hsl(0, 0%, 7%) !important;
 }
 
 .paneR {
     height: auto;
-    padding: 0.5em;
     white-space: pre-line;
 }
 
-.ps {
-  height: 100%;
+.resContainer {
+    overflow-y: scroll;
+    height: 100%;
+    white-space: pre-line;
 }
+
+/* .ps {
+  height: 100%;
+} */
 
 ::-webkit-scrollbar {
     width: 0.5em;

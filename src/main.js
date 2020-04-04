@@ -3,8 +3,25 @@ import App from './App.vue'
 import router from './router.js'
 import { store } from "./store/store";
 
-import '@fortawesome/fontawesome-free/css/all.css'
-import '@fortawesome/fontawesome-free/js/all.js'
+// import '@fortawesome/fontawesome-free/css/all.css';
+// import '@fortawesome/fontawesome-free/js/all.js';
+
+// import { library } from '@fortawesome/fontawesome-svg-core'
+// import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+// library.add(faUserSecret)
+// Vue.component('font-awesome-icon', FontAwesomeIcon)
+
+import Buefy from "buefy";
+import "@fortawesome/fontawesome-free/css/all.css";
+import "@fortawesome/fontawesome-free/css/fontawesome.css";
+Vue.use(Buefy, {
+  defaultIconPack: "fa"
+});
+
+// import Buefy from 'buefy';
+// import 'buefy/dist/buefy.css';
+// Vue.use(Buefy, { defaultIconPack: 'fas' });
 
 import VueSplit from 'vue-split-panel'
 Vue.use(VueSplit)

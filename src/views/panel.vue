@@ -1,199 +1,130 @@
 
 <template>
 
-    <div class="has-background-black-bis has-text-light" style="min-height: 100vh; height: 100%;">
+    <div class="has-background-black-bis has-text-light">
+    
+
+        <splitpanes class="" style="height: 100vh;">
+
+            <!-- PANE 1 (CODE EDITOR) -->
+            <pane size="60" min-size="5">
+                <editor
+                    class="has-background-black-bis"
+                    @keyup.ctrl.enter.exact.native="execute()"
+                    ref='myEditor'
+                    v-model="code"
+                    @init="editorInit"
+                    :lang="lang"
+                    theme="monokai">
+                </editor>
+            </pane>
 
 
-        <div class="columns">
+            <!-- PANE 2 (OUTPUT) -->
+            <pane class="resContainer" min-size="5">
 
-            <div class="column is-narrow is-inline">
-
-                <div class="is-block">
-                    <slider
-                        :width="300"
-                        format="overlay"
-                        direction="left"
-                        :opacity="0.15"
-                        :links="[
-                            {'id': 1, 'text': 'Analyze', 'url': ''},
-                            {'id': 2, 'text': 'Learn', 'url': ''},
-                        ]">
-                    </slider> 
-                </div>
-
-                <div style="margin-top: 3em">
-                    <div class="is-block" v-if="this.$store.getters['selectedLanguage'] === 'Python'" :key="this.$store.getters['selectedLanguage']">
-                        <i class="fab fa-python fa-2x"></i>
+                <nav class="level has-background-black-ter console_level">
+                    <div class="level-left">
+                        <div class="level-item is-size-6">Output</div>
                     </div>
-                    <div class="is-block" v-if="this.$store.getters['selectedLanguage'] === 'JavaScript'" :key="this.$store.getters['selectedLanguage']">
-                        <i class="fab fa-js fa-2x"></i>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="column" style="padding-top: 0">
-
-                <div class="has-background-black-bis has-text-light">
-
-                    <nav class="navbar has-background-black-bis" role="navigation" aria-label="main navigation">
-                        <div class="navbar-brand">
-                            <div class="navbar-item is-paddingless">
-                                <div class="buttons">
-                                    <div class="button is-dark is-small" @click="execute()" >
-                                        <span class="icon">
-                                            <i class="fas fa-play"></i>
-                                        </span>
-                                        <span class="is-size-6">Run</span>
-                                    </div>
-
-                                    <div class="button is-dark is-small">
-                                        <span class="icon">
-                                            <i class="fas fa-save"></i>
-                                        </span>
-                                        <span class="is-size-6">Save</span>
-                                    </div>
-                                </div>
+                    <div class="level-right">
+                        <div class="level-item">
+                            <div class="button is-dark is-small has-background-black-ter" @click="resetResult()" >
+                                <span class="icon">
+                                    <i class="far fa-trash-alt"></i>
+                                </span>
                             </div>
                         </div>
+                    </div>
+                </nav>
+                
+                <div class="list is-hoverable has-background-black-bis is-size-6" >
+                    <div
+                        style="border-bottom: 1px solid #202020"
+                        class="list-item has-text-light is-family-code" 
+                        v-for="(el, index) in result" 
+                        v-bind:key="index">
+                        {{ el }}
+                    </div>
+                    <div
+                        v-if="error != ''"
+                        class="list-item has-text-light"
+                        style="background-color: rgba(255,0,0,0.2)">
+                        {{ error }}
+                    </div>
+                </div>
+            </pane>
 
-                        <div class="navbar-end">
-                            <div class="navbar-item is-paddingless">
-                                <div class="buttons">
-                                    <div class="button is-dark is-small" @click="resetResult()">
-                                        <span class="icon">
-                                            <i class="fas fa-trash"></i>
-                                        </span>
-                                        <span class="is-size-6">Clear</span>
-                                    </div>
-                                </div>
+
+            <!-- PANE 3 (INFO) -->
+            <pane class="resContainer" min-size="5">
+
+                <nav class="level has-background-black-ter console_level">
+                    <div class="level-left">
+                        <div class="level-item is-size-6">
+                            Analysis
+                        </div>
+                    </div>
+                    <div class="level-right">
+                        <div class="level-item">
+                            <div class="button is-dark is-small has-background-black-ter">
                             </div>
                         </div>
+                    </div>
+                </nav>
 
-                    </nav>
+                <div v-if="fileInfo.length">
 
-                    <div style="height: 40em">
-
-                        <split-pane :min-percent='10' :default-percent='70' split="vertical">
-
-                            <template slot="paneL">
-
-                                <editor
-                                    class="has-background-black-bis"
-                                    @keyup.ctrl.enter.exact.native="execute()"
-                                    ref='myEditor'
-                                    v-model="code"
-                                    @init="editorInit"
-                                    :lang="lang"
-                                    theme="monokai">
-                                </editor>
-
-                            </template>
-
-                            <template slot="paneR">
-
-                                    <div class="list is-hoverable has-background-black-bis resContainer">
+                    <div class="content has-text-light">
+                        <ol type="1">
+                            <li>
+                                <p class="has-text-light is-marginless" v-if="fileInfo.length == 1">
+                                    There is only {{ fileInfo.length }} function in this file.
+                                </p>
+                                <p class="has-text-light is-marginless" v-else>
+                                    There are {{ fileInfo.length }} functions in this file.
+                                </p>
+                                <b-collapse :open="false" position="is-bottom" aria-id="contentIdForA11y1">
+                                    <a slot="trigger" slot-scope="props" aria-controls="contentIdForA11y1">
+                                        <b-icon :icon="!props.open ? 'caret-down' : 'caret-up'"></b-icon>
+                                        {{ !props.open ? 'Show detail' : 'Hide detail' }}
+                                    </a>
+                                    <div class="list">
                                         <div
-                                            style="border-bottom: 1px solid #202020"
-                                            class="list-item has-text-success" 
-                                            v-for="(el, index) in result" 
-                                            v-bind:key="index">
-                                            {{ el }}
+                                            type="I"
+                                            style="border-bottom: 1px solid #202020; border-radius: 0"
+                                            class="list-item has-background-black-bis has-text-light" 
+                                            v-for="(el, index) in fileInfo" 
+                                            :key="index">
+
+                                                <div class="is-italic" v-if="el.name">
+                                                    {{ el.name }}
+                                                </div>
+                                                <div class="is-italic" v-else>
+                                                    It's an IIFE.
+                                                </div>
+                                                <div v-if="el.params.length">
+                                                    It has {{ el.params.length }} parameters.
+                                                </div>
+                                                <div v-if="el.variables">
+                                                    Has {{ el.variables }} local variable(s).
+                                                </div>
+                                                <div v-if="el.isEmpty">
+                                                    It is empty.
+                                                </div>
+                                                <div v-if="el.isGenerator">
+                                                    It is a generator.
+                                                </div>
                                         </div>
-
-                                        <div
-                                            v-if="error != ''"
-                                            class="list-item has-text-light"
-                                            style="background-color: rgba(255,0,0,0.2)">
-                                            {{ error }}
-                                        </div>
                                     </div>
-                            
-                            </template>
-
-                        </split-pane>
-                    
+                                </b-collapse>
+                            </li>
+                        </ol>
                     </div>
-
-
                 </div>
+            </pane>
 
-
-                <!-- <div class="content" v-if="fileInfo.length">
-                    The file has {{ fileInfo.length }} functions.
-                    <div class="list is-hoverable">
-                        <div
-                            style="border-bottom: 1px solid #202020"
-                            class="list-item has-background-black-bis has-text-light" 
-                            v-for="(el, index) in fileInfo" 
-                            :key="index">
-
-                                <div class="is-italic">{{ index+1 }}. {{ el.name }}</div>
-                                <div v-if="el.params.length">
-                                    It takes {{ el.params.length }} parameters.
-                                </div>
-                                <div v-if="el.isEmpty">
-                                    It is empty.
-                                </div>
-                                <div v-if="el.isGenerator">
-                                    it is a generator.
-                                </div>
-                        </div>
-                    </div>
-                </div> -->
-
-                <div class="container is-fluid is-paddingless" style="margin-top: 5px">
-                <div v-if="fileInfo.length" class="box has-background-black">
-                    <div class="content" style="margin-bottom: 0">
-                        <span class="subtitle is-4 has-text-light">
-                            Metrics 
-                        </span>
-                        <p class="has-text-light">
-                            There are {{ fileInfo.length }} function(s) in this file.
-                        </p>
-                    </div>
-                    <b-collapse :open="false" position="is-bottom" aria-id="contentIdForA11y1">
-                        <a slot="trigger" slot-scope="props" aria-controls="contentIdForA11y1">
-                            <b-icon :icon="!props.open ? 'caret-down' : 'caret-up'"></b-icon>
-                            {{ !props.open ? 'Show detail' : 'Hide detail' }}
-                        </a>
-                        <div class="list">
-                            <div
-                                type="I"
-                                style="border-bottom: 1px solid #202020; border-radius: 0"
-                                class="list-item has-background-black-bis has-text-light" 
-                                v-for="(el, index) in fileInfo" 
-                                :key="index">
-
-                                    <div class="is-italic" v-if="el.name">
-                                        {{ el.name }}
-                                    </div>
-                                    <div class="is-italic" v-else>
-                                        It's an IIFE.
-                                    </div>
-                                    <div v-if="el.params.length">
-                                        It has {{ el.params.length }} parameters.
-                                    </div>
-                                    <div v-if="el.variables">
-                                        Has {{ el.variables }} local variable(s).
-                                    </div>
-                                    <div v-if="el.isEmpty">
-                                        It is empty.
-                                    </div>
-                                    <div v-if="el.isGenerator">
-                                        It is a generator.
-                                    </div>
-                            </div>
-                        </div>
-                    </b-collapse>
-                </div>
-                </div>
-
-
-
-            </div>
-
-        </div>
+        </splitpanes>
 
 
     </div>
@@ -203,16 +134,18 @@
 
 <script>
 
+    import { EventBus } from '../main.js';
     import axios from 'axios';
-    import Slider from '@jeremyhamm/vue-slider';
-    // import 'bulma-extensions/bulma-accordion/dist/css/bulma-accordion.min.css';
-    
+    import { Splitpanes, Pane } from 'splitpanes';
+    import 'splitpanes/dist/splitpanes.css';
 
     export default {
+
         name: "panel",
         components: {
-            'slider' : Slider,
             editor: require('vue2-ace-editor'),
+            Splitpanes,
+            Pane
         },
 
         computed: {
@@ -243,13 +176,26 @@
 // `,
 
                 code: `
+// Hello.
+//
+// This is Kludge, a tool that helps to detect errors and potential
+// problems in your code.
+//
+// To start, simply enter some code anywhere on this editor and press ctrl+enter. Your
+// report will appear on the right side.
+//
+// Additionally, you can toggle specific options in the Configure
+// menu.
+
 function abc(m,n){
     console.log("shubham");
 }
 
 function def(p,r){
     console.log("bhardwaj");
-}`,
+}
+
+def();`,
 
 
                 cmOptions: {
@@ -298,8 +244,10 @@ function def(p,r){
                         this.result.push(response.data.result);}
                     this.error = response.data.error;
 
-                    this.fileInfo = [];
-                    this.fileInfo = response.data.fileInfo;
+                    this.fileInfo = []; // reset fileInfo for every code execution.
+                    if(response.data.fileInfo){
+                        this.fileInfo = response.data.fileInfo;
+                    }
 
                 }).catch(function(error) {
                     alert(error);
@@ -330,7 +278,7 @@ function def(p,r){
 
             var editor = this.$refs.myEditor.editor;
             editor.setShowPrintMargin(false);
-            editor.setFontSize("22px");
+            editor.setFontSize("20px");
             this.scrollToEnd();
 
         },
@@ -339,6 +287,15 @@ function def(p,r){
 
             this.scrollToEnd();
         
+        },
+
+
+        created(){
+            EventBus.$on('execute', data => {
+                console.log(data)
+                // You can then call your method attached to this component here
+                this.execute()
+            });
         }
 
 
@@ -348,24 +305,35 @@ function def(p,r){
 
 <style>
 
-.splitter-pane-resizer {
-    background-color: hsl(0, 0%, 7%) !important;
+.splitpanes {
+    background-color: hsl(0, 0%, 7%);
+    /* background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB); */
 }
 
-.paneR {
-    height: auto;
-    white-space: pre-line;
+.splitpanes__pane {
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2) inset;
+    justify-content: center;
+    align-items: center;
+    /* display: flex; */
+}
+
+.splitpanes--vertical > .splitpanes__splitter {
+  min-width: 6px;
+  background-color: hsl(0, 0%, 10%);
+  /* background: linear-gradient(90deg, #ccc, #111); */
+}
+
+.splitpanes--horizontal > .splitpanes__splitter {
+  min-height: 6px;
+  background: linear-gradient(0deg, #ccc, #111);
 }
 
 .resContainer {
-    overflow-y: scroll;
+    padding: 0.5em;
+    overflow-y: auto;
     height: 100%;
     white-space: pre-line;
 }
-
-/* .ps {
-  height: 100%;
-} */
 
 ::-webkit-scrollbar {
     width: 0.5em;
@@ -382,6 +350,12 @@ function def(p,r){
 ::-webkit-scrollbar-corner,
 ::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(100, 100, 100, 0.4);
+}
+
+
+.console_level{
+    padding-left: 0.5em;
+    margin-bottom: 0.2em !important;
 }
 
 </style>

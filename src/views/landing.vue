@@ -1,20 +1,23 @@
 
 <template>
-    <div class="has-background-black-ter " style="">
+    <div class="has-background-black-ter" style="">
 
-        <nav class="navbar is-transparent has-background-black-ter">
+        <nav class="navbar is-dark has-background-black-ter is-fixed-top">
+
           <div class="navbar-brand">
             <a class="navbar-item" href="#">
               <img src="../assets/kludge1.png" alt="Kludge" style="width:50px; min-height:50px">
             </a>
-            <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample"
+				:class="{'is-active': isBurgerOpen}" @click="isBurgerOpen = !isBurgerOpen"
+			>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+				<span aria-hidden="true"></span>
+			</a>
           </div>
 
-          <div id="navbarExampleTransparentExample" class="navbar-menu">
+          <div class="navbar-menu has-background-black-ter" id="navbarExampleTransparentExample" :class="{'is-active': isBurgerOpen}">
             <div class="navbar-start">
               <a class="navbar-item has-text-light" href="#">
                 Home
@@ -25,7 +28,6 @@
                 </a>
               </div>
             </div>
-
             <div class="navbar-end">
               <div class="navbar-item">
                 <div class="field is-grouped">
@@ -45,14 +47,19 @@
               </div>
             </div>
           </div>
+
+
+
         </nav>
 
-        <vue-particles color="#fff" style="position: absolute"></vue-particles>
+        <!-- <vue-particles color="#fff" style="position: absolute">
+		</vue-particles> -->
 
-        <div class="columns" style="padding-left: 10em; padding-right: 10em;">
+		<div class="container" style="">
+        <div class="columns">
 
             <div class="column is-4">
-                <section class="hero has-background-black-ter is-large">
+                <section class="hero has-background-black-ter is-fullheight">
                     <div class="hero-body">
                         <div class="container">
                             <div class="is-pulled-right">
@@ -80,6 +87,7 @@
                 </section>
             </div>
         </div>
+		</div>
 
 
 
@@ -93,7 +101,12 @@
         name: "landing",
         components: {
 
-        }
+        },
+		data() {
+			return {
+				isBurgerOpen: false,
+			}
+		}
     }
 </script>
 

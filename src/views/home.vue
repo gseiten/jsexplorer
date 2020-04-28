@@ -2,11 +2,11 @@
 <template>
     <div class="has-background-black-bis" style="">
 
-        <nav class="navbar is-transparent is-fixed has-background-black-bis" style="z-index: 100">
+        <nav class="navbar has-background-black-bis">
           <div class="navbar-brand">
-            <a class="navbar-item" href="#">
-              <img src="../assets/kludge1.png" alt="Kludge" style="width:40px; min-height:40px">
-            </a>
+            <div class="navbar-item" >
+              <img src="../assets/kludge1.png" alt="Kludge" style="width:30px; min-height:30px">
+            </div>
             <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
               <span></span>
               <span></span>
@@ -16,59 +16,59 @@
 
           <div id="navbarExampleTransparentExample" class="navbar-menu">
             <div class="navbar-start">
-                <a class="navbar-item">
-                    <v-select 
-					style="min-width: 200px" 
-					v-model="selectedLanguage" 
-					:options="['JavaScript', 'Python']"
-				>	
-					</v-select>
+                <a class="navbar-item" style="background-color: hsl(0, 0%, 7%)">
+
+					<div class="buttons">
+						<div class="button is-dark is-small" @click="emitGlobalExecutionEvent()" >
+							<span class="icon">
+								<i class="fas fa-play"></i>
+							</span>
+							<span class="is-size-6">Run</span>
+						</div>
+
+						<div class="button is-dark is-small">
+							<span class="icon">
+								<i class="fas fa-save"></i>
+							</span>
+							<span class="is-size-6">Save</span>
+						</div>
+					</div>
+
                 </a>
             </div>
 
             <div class="navbar-end">
               <div class="navbar-item">
-                <div class="field is-grouped">
-                  <p class="control">
-                    <a class="button is-dark" href="#">
-                      <!-- <span class="icon">
-                        <i class="fab fa-twitter"></i>
-                      </span> -->
-                      <span>
-                        Sign In
-                      </span>
-                    </a>
-                  </p>
-                  <p class="control">
-                    <a class="button is-dark is-active" href="#">
-                      <!-- <span class="icon">
-                        <i class="fas fa-download"></i>
-                      </span> -->
-                      <span>Register</span>
-                    </a>
-                  </p>
-                </div>
+				<v-select 
+					style="min-width: 200px" 
+					v-model="selectedLanguage" 
+					:options="['JavaScript', 'Python']"
+				></v-select>
               </div>
             </div>
           </div>
         </nav>
 
-
-        <div style="padding: 1em">
-            <router-view>
-            </router-view>
+        <div class="columns">
+			<div class="column is-narrow" style="padding-right: 0">
+				<sidebar></sidebar>
+			</div>
+			<div class="column" style="padding-left: 0">
+				<router-view></router-view>
+			</div>
         </div>
-
 
     </div>
 </template>
 
 <script>
 
+	import { EventBus } from '../main.js';
+	import sidebar from '../components/sidebar.vue';
     export default {
         name: "home",
         components: {
-
+			sidebar
 		},
 		data(){
 			return {
@@ -76,6 +76,14 @@
 			}
 		},
 		methods: {
+
+			// callExecMethod(){
+			// 	this.$refs.executionButtonRef.execute();
+			// },
+
+			emitGlobalExecutionEvent() {
+				EventBus.$emit('execute');
+			},
 		
 		},
 		watch: {

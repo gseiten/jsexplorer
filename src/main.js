@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router.js'
 import { store } from "./store/store";
+export const EventBus = new Vue(); 
 
 // import '@fortawesome/fontawesome-free/css/all.css';
 // import '@fortawesome/fontawesome-free/js/all.js';
@@ -12,16 +13,16 @@ import { store } from "./store/store";
 // library.add(faUserSecret)
 // Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-import Buefy from "buefy";
+// import Buefy from "buefy";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "@fortawesome/fontawesome-free/css/fontawesome.css";
-Vue.use(Buefy, {
-  defaultIconPack: "fa"
-});
+// Vue.use(Buefy, {
+//   defaultIconPack: "fa"
+// });
 
-// import Buefy from 'buefy';
-// import 'buefy/dist/buefy.css';
-// Vue.use(Buefy, { defaultIconPack: 'fas' });
+import Buefy from 'buefy';
+import 'buefy/dist/buefy.css';
+Vue.use(Buefy);
 
 import VueSplit from 'vue-split-panel'
 Vue.use(VueSplit)

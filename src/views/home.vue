@@ -26,25 +26,62 @@
 							<span class="is-size-6">Run</span>
 						</div>
 
-						<div class="button is-dark is-small">
+						<div class="button is-dark is-small" disabled>
 							<span class="icon">
 								<i class="fas fa-save"></i>
 							</span>
 							<span class="is-size-6">Save</span>
 						</div>
+
+						<div class="button is-dark is-small" disabled>
+							<span class="icon">
+								<i class="fas fa-align-right"></i>
+							</span>
+							<span class="is-size-6">Beautify</span>
+						</div>
+
+						<div class="button is-dark is-small" disabled>
+							<span class="icon">
+								<i class="fas fa-share"></i>
+							</span>
+							<span class="is-size-6">Share</span>
+						</div>
+
+						<div class="button is-dark is-small" disabled>
+							<span class="icon">
+								<i class="fas fa-download"></i>
+							</span>
+							<span class="is-size-6">Download</span>
+						</div>
+
+
 					</div>
 
                 </a>
             </div>
 
             <div class="navbar-end">
-              <div class="navbar-item">
-				<v-select 
-					style="min-width: 200px" 
-					v-model="selectedLanguage" 
-					:options="['JavaScript', 'Python']"
-				></v-select>
-              </div>
+
+				<div class="navbar-item">
+					<v-select 
+						style="min-width: 200px" 
+						v-model="selectedLanguage" 
+						:options="['JavaScript', 'Python']"
+					></v-select>
+				</div>
+
+				<div class="navbar-item">
+					<b-dropdown position="is-bottom-left" append-to-body aria-role="menu" trap-focus>
+						<button class="button is-dark has-background-black-bis is-small" slot="trigger">
+							<b-icon pack="fas" icon="cog"></b-icon>
+						</button>
+						<b-dropdown-item>Editor Theme</b-dropdown-item>
+						<b-dropdown-item>Font Size</b-dropdown-item>
+					</b-dropdown>
+				</div>
+
+
+
             </div>
           </div>
         </nav>

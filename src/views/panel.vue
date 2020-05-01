@@ -7,7 +7,7 @@
         <splitpanes class="" style="height: 100vh;">
 
             <!-- PANE 1 (CODE EDITOR) -->
-            <pane size="60" min-size="5">
+            <pane :size="editorPanelSize" min-size="5">
                 <editor
                     class="has-background-black-bis"
                     @keyup.ctrl.enter.exact.native="execute()"
@@ -19,9 +19,8 @@
                 </editor>
             </pane>
 
-
             <!-- PANE 2 (OUTPUT) -->
-            <pane class="resContainer" min-size="5">
+            <pane class="resContainer" :size="outputPanelSize" min-size="5">
 
                 <nav class="level has-background-black-ter console_level">
                     <div class="level-left">
@@ -55,9 +54,8 @@
                 </div>
             </pane>
 
-
             <!-- PANE 3 (INFO) -->
-            <pane class="resContainer" min-size="5">
+            <pane class="resContainer" :size="analysisPanelSize" min-size="10">
 
                 <nav class="level has-background-black-ter console_level">
                     <div class="level-left">
@@ -67,14 +65,24 @@
                     </div>
                     <div class="level-right">
                         <div class="level-item">
-                            <div class="button is-dark is-small has-background-black-ter">
+                            <div class="button is-dark is-small has-background-black-ter is-paddingless" >
+                            <b-tooltip :label="turnoffMessage" type="is-dark" position="is-left" :delay="500" >
+                                <b-switch
+                                    v-model="isAnalysisOn"
+                                    size="is-small" 
+                                    type="is-light" 
+                                    :outlined="true" 
+                                >
+                                </b-switch>
+                            </b-tooltip>
                             </div>
                         </div>
                     </div>
                 </nav>
 
-                <div v-if="fileInfo.length">
 
+                <!-- {{ code_snippet }} -->
+                <!-- <div v-if="fileInfo.length">
                     <div class="content has-text-light">
                         <ol type="1">
                             <li>
@@ -86,7 +94,7 @@
                                 </p>
                                 <b-collapse :open="false" position="is-bottom" aria-id="contentIdForA11y1">
                                     <a slot="trigger" slot-scope="props" aria-controls="contentIdForA11y1">
-                                        <b-icon :icon="!props.open ? 'caret-down' : 'caret-up'"></b-icon>
+                                        <b-icon :icon="!props.open ? 'caret-down' : 'caret-up'" pack="fas" ></b-icon>
                                         {{ !props.open ? 'Show detail' : 'Hide detail' }}
                                     </a>
                                     <div class="list">
@@ -121,7 +129,57 @@
                             </li>
                         </ol>
                     </div>
-                </div>
+                </div> -->
+
+
+                <!-- complexity report -->
+                <!-- Object.keys(obj).length === 0 && obj.constructor === Object -->
+
+                <b-collapse
+                    
+                    class="card has-background-black-ter has-text-light"
+                    animation="slide"
+                    v-for="(cr, index) of complexity_report"
+                    :key="index"
+                    :open="isOpen == index"
+                    @open="isOpen = index">
+
+                    <div
+                        slot="trigger"
+                        slot-scope="props"
+                        class="card-header"
+                        role="button">
+                        <p class="card-header-title has-text-light">
+                            <span v-if="cr.title === 'Aggregate'">
+                                {{ cr.title }}
+                            </span>
+                            <span v-else>
+                                <span class="has-text-warning has-text-weight-normal">function</span>
+                                <span style="margin-left:0.5em">{{ cr.title }}</span>
+                            </span>
+                        </p>
+                        <a class="card-header-icon">
+                            <b-icon
+                                :icon="props.open ? 'menu-down' : 'menu-up'">
+                            </b-icon>
+                        </a>
+                    </div>
+                    <div class="card-content">
+
+                        <div class="content">
+                            The file has a <span class="has-text-warning">cyclomatic complexity</span> score of
+                            <strong class="has-text-light">{{ cr.data.cyclomatic }}</strong> 
+                            and <span class="has-text-warning">density  </span>
+                            <strong class="has-text-light">{{ cr.data.cyclomaticDensity }}</strong>.
+                            <br>
+                            There are a total of 
+                            <strong class="has-text-light">{{ cr.data.lines }} </strong>
+                                physical line(s) of code. 
+                        </div>
+
+                    </div>
+                </b-collapse>
+
             </pane>
 
         </splitpanes>
@@ -138,6 +196,7 @@
     import axios from 'axios';
     import { Splitpanes, Pane } from 'splitpanes';
     import 'splitpanes/dist/splitpanes.css';
+    var code_snippet =  require('../constants/code_snippets.js');
 
     export default {
 
@@ -148,55 +207,18 @@
             Pane
         },
 
-        computed: {
-            selectedLanguage(){
-                return this.$store.getters['selectedLanguage']
-            }
-        },
-
-        watch: {
-            selectedLanguage(newVal){
-                this.lang = newVal.toLowerCase();
-            }
-        },
-
         data() {
             return {
+
+                isOpen: 0,
+                complexity_report: [],
+
                 lang: "javascript",
                 result: [],
                 error: "",
                 fileInfo: [],
 
-//                 code: `
-// let arr = Array(20).fill().map((_, i) => i * i);
-// for(var i in arr){
-//     let random = Math.random().toString(36).substr(2, 9);
-//     console.log(random);
-// }
-// `,
-
-                code: `
-// Hello.
-//
-// This is Kludge, a tool that helps to detect errors and potential
-// problems in your code.
-//
-// To start, simply enter some code anywhere on this editor and press ctrl+enter. Your
-// report will appear on the right side.
-//
-// Additionally, you can toggle specific options in the Configure
-// menu.
-
-function abc(m,n){
-    console.log("shubham");
-}
-
-function def(p,r){
-    console.log("bhardwaj");
-}
-
-def();`,
-
+                code: code_snippet.js,
 
                 cmOptions: {
                     tabSize: 4,
@@ -205,6 +227,14 @@ def();`,
                     lineNumbers: true,
                     line: true,
                 },
+
+                editorPanelSize: 40,
+                outputPanelSize: 30,
+                analysisPanelSize: 30,
+
+                turnoffMessage: 'switch off code analysis',
+                isAnalysisOn: true,
+
 
             }
         },
@@ -232,9 +262,10 @@ def();`,
                 axios.post('/api/js', 
                     {
                         'code': this.code,
-                        'lang': this.lang
+                        'lang': this.lang,
+                        'analysis': this.isAnalysisOn
                     },
-                    { 
+                    {
                         headers: { 
                             'Content-Type': 'application/json',
                     }
@@ -248,6 +279,16 @@ def();`,
                     if(response.data.fileInfo){
                         this.fileInfo = response.data.fileInfo;
                     }
+
+                    this.complexity_report = [];
+                    if(Object.keys(response.data['complexity_report']).length === 0 && 
+                        response.data['complexity_report'].constructor === Object) {
+                            console.log("Complexity report is empty!!")
+                        }
+                    else {
+                        this.complexity_report = response.data['complexity_report']
+                    }
+
 
                 }).catch(function(error) {
                     alert(error);
@@ -289,14 +330,49 @@ def();`,
         
         },
 
-
         created(){
-            EventBus.$on('execute', data => {
-                console.log(data)
+
+            EventBus.$on('execute', () => {
                 // You can then call your method attached to this component here
                 this.execute()
             });
-        }
+
+        },
+
+        computed: {
+            selectedLanguage(){
+                return this.$store.getters['selectedLanguage']
+            }
+        },
+
+        watch: {
+
+            isAnalysisOn() {
+
+                if(this.isAnalysisOn) { 
+                    this.editorPanelSize = 40;
+                    this.outputPanelSize = 30;
+                    this.analysisPanelSize = 30; 
+                } else {
+                    this.editorPanelSize = 60;
+                    this.outputPanelSize = 30;
+                    this.analysisPanelSize = 10;
+                    this.complexity_report = [];
+                }
+
+            },
+
+            selectedLanguage(newVal) {
+                this.lang = newVal.toLowerCase();
+                if(this.lang === 'python'){
+                    this.code = code_snippet.py; 
+                } else if(this.lang === 'javascript'){
+                    this.code = code_snippet.js;
+                }
+
+
+            }
+        },
 
 
     }

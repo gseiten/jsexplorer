@@ -13,33 +13,49 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
-    // Import Bulma's core
-    @import "~bulma/sass/utilities/_all";
-
-    // Set your colors
-    $primary: #8c67ef;
-    $primary-invert: findColorInvert($primary);
-
-    // Setup $colors to use as bulma classes (e.g. 'is-twitter')
-    $colors: (
-      "primary": ($primary, $primary-invert),
-    );
-
-    // Links
-    $link: $primary;
-    $link-invert: $primary-invert;
-    $link-focus-border: $primary;
+<style lang="css">
 
 
+@import '../node_modules/buefy/dist/buefy.css';
 
 
-    /* @import '../node_modules/bulma/css/bulma.css'; */
+/* Buefy Sidebar */
+.b-sidebar .sidebar-content.is-dark {
+    background-color: hsl(0, 0%, 7%) !important;
+}
+.b-sidebar .sidebar-content {
+  box-shadow: none !important;
+}
+.menu-list a.is-active {
+  background-color:transparent !important; 
+  color: white;
+}
 
-    /* #app {
-        padding: 0;
-        margin: 0;
-    } */
+/* Buefy Table */
+.b-table .table{
+    background-color: hsl(0, 0%, 10%) !important;
+    color: whitesmoke !important;
+    border-radius: 0 !important;
+}
+.b-table .table th {
+  font-weight: 600;
+  color: whitesmoke !important;
+  border-color: hsl(0, 0%, 14%) !important;
+}
+.b-table .table td {
+  border-width: 1px !important; 
+  border-color: hsl(0, 0%, 14%) !important;
+}
+.table.is-hoverable tbody tr:not(.is-selected):hover {
+   background-color: rgba(128, 128, 128, 0.1) !important;
+}
+.table.is-hoverable.is-striped tbody tr:not(.is-selected):hover {
+   background-color: rgba(128, 128, 128, 0.1) !important;
+}
+.table.is-hoverable.is-striped tbody tr:not(.is-selected):hover:nth-child(even) {
+  background-color: rgba(128, 128, 128, 0.1) !important;
+}
+
+
 
 </style>

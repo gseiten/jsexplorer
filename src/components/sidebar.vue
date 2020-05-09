@@ -8,7 +8,7 @@
                 :mobile="mobile"
                 :expand-on-hover="expandOnHover"
                 :reduce="reduce"
-                type="is-black"
+                type="is-dark"
 				style="height: 100vh;"
                 open
             >
@@ -21,17 +21,20 @@
                     </div>
                     <b-menu class="is-custom-mobile">
                         <b-menu-list label="Menu" >
-                            <b-menu-item icon="code-tags" active label="Code Editor"></b-menu-item>
-							<b-menu-item icon="code-braces" label="Learn Programming"></b-menu-item>
-                            <b-menu-item icon="settings" label="Administrator">
+
+                            <b-menu-item active icon="code-tags" label="Code Editor" @click="changeRoute('panel')"></b-menu-item>
+
+                            <b-menu-item icon="book" label="Learn Programming" @click="changeRoute('resources')"></b-menu-item>
+
+                            <b-menu-item icon="shield-account" label="Administrator">
                                 <b-menu-item icon="account" label="Users"></b-menu-item>
                                 <b-menu-item icon="cellphone-link" label="Devices"></b-menu-item>
                                 <b-menu-item icon="cash-multiple" label="Payments" disabled></b-menu-item>
                             </b-menu-item>
-                            <b-menu-item icon="account" label="My Account">
-                                <b-menu-item icon="account-box" label="Account data"></b-menu-item>
-                                <b-menu-item icon="home-account" label="Addresses"></b-menu-item>
+
+                            <b-menu-item icon="forum" label="Public Space" @click="changeRoute('forum')">
                             </b-menu-item>
+
                         </b-menu-list>
                         <b-menu-list>
                             <b-menu-item label="Expo" icon="link"></b-menu-item>
@@ -39,31 +42,15 @@
                         <b-menu-list label="Actions">
 							<b-menu-item icon="login" label="Login"></b-menu-item>
 							<b-menu-item icon="account-plus" label="Register"></b-menu-item>
-                            <!-- <b-menu-item icon="logout" label="Logout"></b-menu-item> -->
                         </b-menu-list>
 						<b-menu-list label="Misc.">
-                            <b-menu-item icon="book" label="Blog"></b-menu-item>
+                            <b-menu-item icon="rss" label="Blog"></b-menu-item>
+                            <b-menu-item icon="panda" label="Test View" @click="changeRoute('test-view')"></b-menu-item>
                         </b-menu-list>
                     </b-menu>
                 </div>
             </b-sidebar>
 
-            <!-- <div class="p-1">
-                <b-field>
-                    <b-switch v-model="reduce">Reduced</b-switch>
-                </b-field>
-                <b-field>
-                    <b-switch v-model="expandOnHover">Expand on hover</b-switch>
-                </b-field>
-                <b-field label="Mobile Layout">
-                    <b-select v-model="mobile">
-                        <option :value="null"></option>
-                        <option value="reduce">Reduced</option>
-                        <option value="hide">Hidden</option>
-                        <option value="fullwidth">Fullwidth</option>
-                    </b-select>
-                </b-field>
-            </div> -->
         </section>
     </div>
 </template>
@@ -81,7 +68,12 @@ export default {
 			mobile: "reduce",
 			reduce: true
 		};
-	}
+    },
+    methods: {
+        changeRoute(path){
+            this.$router.push(path);
+        }
+    }
 };
 </script>
 

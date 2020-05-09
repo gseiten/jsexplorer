@@ -28,10 +28,27 @@
                     </div>
                     <div class="level-right">
                         <div class="level-item">
+                            <b-tooltip label="Clear output" type="is-dark" position="is-left" :delay="500" >
                             <div class="button is-dark is-small has-background-black-ter" @click="resetResult()" >
                                 <span class="icon">
                                     <i class="far fa-trash-alt"></i>
                                 </span>
+                            </div>
+                            </b-tooltip>
+                        </div>
+
+                        <!-- This will show up on output's panel when analysis is off. -->
+                        <div class="level-item" v-if="!isAnalysisOn">
+                            <div class="button is-dark is-small has-background-black-ter is-paddingless" >
+                            <b-tooltip :label="turnoffMessage" type="is-dark" position="is-left" :delay="500" >
+                                <b-switch
+                                    v-model="isAnalysisOn"
+                                    size="is-small" 
+                                    type="is-light" 
+                                    :outlined="true" 
+                                >
+                                </b-switch>
+                            </b-tooltip>
                             </div>
                         </div>
                     </div>
@@ -55,7 +72,7 @@
             </pane>
 
             <!-- PANE 3 (INFO) -->
-            <pane class="resContainer" :size="analysisPanelSize" min-size="10">
+            <pane class="resContainer" v-if="isAnalysisOn" :size="analysisPanelSize" min-size="10">
 
                 <nav class="level has-background-black-ter console_level">
                     <div class="level-left">
@@ -79,7 +96,6 @@
                         </div>
                     </div>
                 </nav>
-
 
                 <!-- {{ code_snippet }} -->
                 <!-- <div v-if="fileInfo.length">
@@ -218,7 +234,7 @@
                 error: "",
                 fileInfo: [],
 
-                code: code_snippet.js,
+                code: code_snippet.js, // js is a property of code_snippet object.
 
                 cmOptions: {
                     tabSize: 4,
@@ -228,9 +244,9 @@
                     line: true,
                 },
 
-                editorPanelSize: 40,
-                outputPanelSize: 30,
-                analysisPanelSize: 30,
+                editorPanelSize: 60,
+                outputPanelSize: 20,
+                analysisPanelSize: 20,
 
                 turnoffMessage: 'switch off code analysis',
                 isAnalysisOn: true,
@@ -281,14 +297,15 @@
                     }
 
                     this.complexity_report = [];
-                    if(Object.keys(response.data['complexity_report']).length === 0 && 
-                        response.data['complexity_report'].constructor === Object) {
-                            console.log("Complexity report is empty!!")
+                    if(response.data.complexity_report){
+                        if(Object.keys(response.data['complexity_report']).length === 0 && 
+                            response.data['complexity_report'].constructor === Object) {
+                                console.log("Complexity report is empty!!")
+                            }
+                        else {
+                            this.complexity_report = response.data['complexity_report']
                         }
-                    else {
-                        this.complexity_report = response.data['complexity_report']
                     }
-
 
                 }).catch(function(error) {
                     alert(error);
@@ -350,13 +367,14 @@
             isAnalysisOn() {
 
                 if(this.isAnalysisOn) { 
-                    this.editorPanelSize = 40;
-                    this.outputPanelSize = 30;
-                    this.analysisPanelSize = 30; 
-                } else {
                     this.editorPanelSize = 60;
-                    this.outputPanelSize = 30;
-                    this.analysisPanelSize = 10;
+                    this.outputPanelSize = 20;
+                    this.analysisPanelSize = 20;
+                    this.turnoffMessage = 'switch off code analysis.'
+                } else {
+                    this.editorPanelSize = 70;
+                    this.outputPanelSize = 100 - this.editorPanelSize;
+                    this.turnoffMessage = 'switch on code analysis.'
                     this.complexity_report = [];
                 }
 
@@ -380,6 +398,11 @@
 
 
 <style>
+
+/* Buefy Collapse */
+a.card-header-icon {
+    color: whitesmoke !important;
+}
 
 .splitpanes {
     background-color: hsl(0, 0%, 7%);

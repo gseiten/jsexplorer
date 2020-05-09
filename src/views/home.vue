@@ -2,7 +2,7 @@
 <template>
     <div class="has-background-black-bis" style="">
 
-        <nav class="navbar has-background-black-bis">
+        <nav class="navbar is-fixed-top has-background-black-bis">
           <div class="navbar-brand">
             <div class="navbar-item" >
               <img src="../assets/kludge1.png" alt="Kludge" style="width:30px; min-height:30px">
@@ -23,7 +23,9 @@
 							<span class="icon">
 								<i class="fas fa-play"></i>
 							</span>
-							<span class="is-size-6">Run</span>
+							<b-tooltip :label="runMessage" type="is-dark" position="is-bottom" :delay="500" multilined>
+								<span class="is-size-6">Run</span>
+							</b-tooltip>
 						</div>
 
 						<div class="button is-dark is-small" disabled>
@@ -110,6 +112,7 @@
 		data(){
 			return {
 				selectedLanguage: "JavaScript",
+				runMessage: "use ctrl+enter as shortcut. command+enter for mac."
 			}
 		},
 		methods: {
@@ -137,4 +140,5 @@
 </script>
 
 <style>
+
 </style>

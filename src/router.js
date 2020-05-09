@@ -7,6 +7,8 @@ import home from './views/home.vue';
 import panel from './views/panel.vue';
 import testView from './views/testView.vue';
 import landing from './views/landing.vue';
+import resources from './views/resources.vue';
+import forum from './views/forum.vue';
 
 const router = new Router({
     routes: [
@@ -26,6 +28,16 @@ const router = new Router({
                     path: '/panel',
 					name: 'panel',
 					component : panel
+                },
+                {
+                    path: '/resources',
+					name: 'resources',
+					component : resources
+                },
+                {
+                    path: '/forum',
+					name: 'forum',
+					component : forum
 				}
             ]
         },

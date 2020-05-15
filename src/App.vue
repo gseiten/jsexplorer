@@ -15,9 +15,25 @@ export default {
 
 <style lang="css">
 
+::-webkit-scrollbar {
+    width: 0.3em;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(100, 100, 100, 0.8);
+}
+
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(100, 100, 100, 0.4);
+}
+
 
 @import '../node_modules/buefy/dist/buefy.css';
-
 
 /* Buefy Sidebar */
 .b-sidebar .sidebar-content.is-dark {
@@ -56,6 +72,18 @@ export default {
   background-color: rgba(128, 128, 128, 0.1) !important;
 }
 
-
+/* pagination changes */
+.pagination-link.is-current {
+  background-color: hsl(0, 0%, 14%) !important;
+  border-color: whitesmoke !important
+}
+.pagination{
+  margin-right: 12px !important;
+}
+.pagination-previous:focus,
+.pagination-next:focus,
+.pagination-link:focus {
+  border-color: whitesmoke !important;
+}
 
 </style>

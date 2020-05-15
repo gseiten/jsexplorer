@@ -1,6 +1,10 @@
-<template>
 
-<div class="">
+
+<template>
+<!-- padding-top due to fixed navbar -->
+
+
+<div class="" >
 <!-- <split-pane :min-percent='10' :default-percent='70' split="vertical">
     <template slot="paneL">
         <div v-for="i in 15" :key="i">
@@ -11,7 +15,7 @@
         <div v-for="i in 115" :key="i">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. In odit, reiciendis totam itaque dolorem autem qui? Nesciunt libero eius esse optio et quod atque perferendis quidem neque, aspernatur cum rerum!
         </div>
-    </template> 
+    </template>
 </split-pane> -->
 <splitpanes class="has-text-light" style="height: 100vh">
   <pane class="resContainer">

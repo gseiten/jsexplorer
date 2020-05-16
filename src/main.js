@@ -58,6 +58,10 @@ import PerfectScrollbar from 'vue2-perfect-scrollbar';
 import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css';
 Vue.use(PerfectScrollbar);
 
+import VueSimplemde from 'vue-simplemde';
+import 'simplemde/dist/simplemde.min.css';
+Vue.component('vue-simplemde', VueSimplemde);
+
 
 Vue.config.productionTip = false
 

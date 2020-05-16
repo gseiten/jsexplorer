@@ -1,8 +1,10 @@
 
 <template>
 
-    <div class="container is-fluid is-unselectable">
+    <div class="container is-fluid ">
 
+        <newpost :status="is_newpost_modal_open" @closeNewpostModal="closeNewpostModal" :key="is_newpost_modal_open" >
+        </newpost>
         
         <div class="main_table">
 
@@ -14,7 +16,7 @@
             :paginated="true"
             :per-page="25"
             pagination-size="is-small"
-            @click="ConversationClicked"
+            @click="conversationClicked"
         >
 
             <template slot-scope="props">
@@ -85,14 +87,17 @@
         </b-table>
         </div> <!-- table ends here -->
 
-        <div class="modal" :class="{'is-active': is_modal_open}">
-            <div class="modal-background"></div>
+
+        <b-modal :active.sync="is_modal_open" has-modal-card :full-screen="is_modal_fullscreen" :can-cancel="false">
             <div class="modal-card">
                 <header class="modal-card-head">
                     <div class="modal-card-title">
-                        Modal title
+                        #121
                     </div>
-                    <button class="delete" aria-label="close" @click="is_modal_open = !is_modal_open"></button>
+                    <button class="delete has-background-black-ter" aria-label="close" @click="is_modal_open = !is_modal_open"></button>
+                    <div class="button is-dark is-small" @click="is_modal_fullscreen = !is_modal_fullscreen">
+                        <i class="fas fa-compress"></i>
+                    </div>
                 </header>
                 <section class="modal-card-body">
                     <article class="media">
@@ -160,32 +165,32 @@
                         </div>
                         </article>
 
+                        <article class="media">
+                            <figure class="media-left">
+                                <p class="image is-48x48">
+                                <img :src="opened_conversation.picture">
+                                </p>
+                            </figure>
+                            <div class="media-content">
+                                <div class="field">
+                                <p class="control has-background-white">
+                                    <vue-simplemde ref="markdownEditor" v-model="user_reply" />
+                                </p>
+                                </div>
+                                <div class="field">
+                                <p class="control">
+                                    <button class="button is-dark is-pulled-right">Post comment</button>
+                                </p>
+                                </div>
+                            </div>
+                        </article>
+
                 </section>
 
-                <footer class="modal-card-foot">
-                    <article class="media">
-                        <figure class="media-left">
-                            <p class="image is-48x48">
-                            <img :src="opened_conversation.picture">
-                            </p>
-                        </figure>
-                        <div class="media-content">
-                            <div class="field">
-                            <p class="control">
-                                <textarea class="textarea" placeholder="Add a comment..."></textarea>
-                            </p>
-                            </div>
-                            <div class="field">
-                            <p class="control">
-                                <button class="button is-dark is-pulled-right">Post comment</button>
-                            </p>
-                            </div>
-                        </div>
-                    </article>
-                </footer>
-
             </div>
-        </div>
+        </b-modal>
+
+
 
 
     </div>
@@ -194,12 +199,14 @@
 
 <script>
 
+import { EventBus } from '../main.js';
 import axios from 'axios';
+import newpost from '../components/newpost.vue';
 
 export default {
     name: 'forum',
     components: {
-        
+        newpost
     },
     data(){
         return {
@@ -207,15 +214,29 @@ export default {
             table_data: [],
             opened_conversation: {},
             is_modal_open: false,
+            is_modal_fullscreen: false,
+            user_reply: '',
+            is_newpost_modal_open: false,
         }
     },
     methods:{
-        ConversationClicked(row){
+        conversationClicked(row){
             this.is_modal_open = true;
             this.opened_conversation = row;
+        },
+        openNewPostModal(){
+            this.is_newpost_modal_open = true;
+        },
+        closeNewpostModal(value){
+            this.is_newpost_modal_open = value;
         }
     },
     created(){
+
+        EventBus.$on('newpost', () => {
+            this.openNewPostModal()
+        });
+
         axios.get(this.users_url).then(response => {
             let users = response.data.results;
             users.forEach((user, index) => {
@@ -229,6 +250,10 @@ export default {
             });
         })
     },
+    beforeDestroy () {
+        EventBus.$off('askquestion', this.askquestion)
+    },
+
 
 }
 
@@ -236,25 +261,15 @@ export default {
 
 <style lang="css" scoped>
 
-
 a {
     color: whitesmoke;
 }
 a:hover{
-    color: green;
+    color: blue;
 }
 
 strong {
     color: whitesmoke;
-}
-
-.textarea {
-    background-color: hsl(0, 0%, 10%);
-    color: whitesmoke;
-}
-.textarea:focus, .textarea:active{
-    border: 2px whitesmoke solid;
-    box-shadow: none;
 }
 
 .media .content {
@@ -268,15 +283,25 @@ strong {
 }
 
 .modal-card {
-    width: 45em;
+    border-radius: 0%;
 }
 
 .modal-card .modal-card-head {
     background-color:hsl(0, 0%, 14%);
     color: whitesmoke;
+    border-radius: 0%;
 }
 .modal-card .modal-card-head .modal-card-title {
     color: whitesmoke;
+}
+.modal-card .modal-card-head .button {
+    font-size: 0.8em;
+    margin-left: 1em;
+    background-color: hsl(0, 0%, 14%);
+}
+
+.modal-card .modal-card-head .button:hover, .modal-card .modal-card-head .delete:hover{
+    transform: scale(1.5);
 }
 
 .modal-card .modal-card-body {
@@ -284,15 +309,6 @@ strong {
     color: whitesmoke;
     overflow-y: scroll;
     height: 100%;
-}
-
-.modal-card .modal-card-foot {
-    background-color: hsl(0, 0%, 14%);
-    color: whitesmoke;
-}
-
-.modal-card .modal-card-foot .media {
-    width: 100%;
 }
 
 </style>

@@ -86,4 +86,18 @@ export default {
   border-color: whitesmoke !important;
 }
 
+/* buefy taginput */
+.taginput .is-focused.taginput-container.is-focusable, .taginput .is-active.taginput-container.is-focusable, .taginput .taginput-container.is-focusable:active {
+  border: whitesmoke !important;
+  box-shadow: 0 0 0 0.125em whitesmoke !important;
+}
+
+
+
+/* Simple Markdown editor */
+@import '~simplemde/dist/simplemde.min.css';
+.CodeMirror , .CodeMirror-scroll {
+  min-height: 150px !important;
+}
+
 </style>

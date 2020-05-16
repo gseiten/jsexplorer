@@ -356,6 +356,10 @@
 
         },
 
+        beforeDestroy () {
+            EventBus.$off('execute', this.execute)
+        },
+
         computed: {
             selectedLanguage(){
                 return this.$store.getters['selectedLanguage']

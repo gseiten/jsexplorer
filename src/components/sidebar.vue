@@ -22,9 +22,19 @@
                     <b-menu class="is-custom-mobile">
                         <b-menu-list label="Menu" >
 
-                            <b-menu-item active icon="code-tags" label="Code Editor" @click="changeRoute('panel')"></b-menu-item>
+                            <b-menu-item
+                                icon="code-tags" 
+                                label="Code Editor"
+                                :active="this.$store.getters.selectedMenuOption == 'panel' ? true : false"
+                                @click="changeRoute('panel')">
+                            </b-menu-item>
 
-                            <b-menu-item icon="book" label="Learn Programming" @click="changeRoute('resources')"></b-menu-item>
+                            <b-menu-item 
+                                icon="book" 
+                                label="Learn Programming" 
+                                :active="this.$store.getters.selectedMenuOption == 'resources' ? true : false"
+                                @click="changeRoute('resources')">
+                            </b-menu-item>
 
                             <b-menu-item icon="shield-account" label="Administrator">
                                 <b-menu-item icon="account" label="Users"></b-menu-item>
@@ -32,7 +42,11 @@
                                 <b-menu-item icon="cash-multiple" label="Payments" disabled></b-menu-item>
                             </b-menu-item>
 
-                            <b-menu-item icon="forum" label="Public Space" @click="changeRoute('forum')">
+                            <b-menu-item 
+                                icon="forum" 
+                                label="Public Space" 
+                                :active="this.$store.getters.selectedMenuOption == 'forum' ? true : false"
+                                @click="changeRoute('forum')">
                             </b-menu-item>
 
                         </b-menu-list>
@@ -66,13 +80,17 @@ export default {
 		return {
 			expandOnHover: true,
 			mobile: "reduce",
-			reduce: true
+            reduce: true,
 		};
     },
     methods: {
         changeRoute(path){
-            this.$router.push(path);
+            this.$router.push(path).catch(err => {alert(err)});
+            this.$store.commit("changeSelectedMenuOption", path);
         }
+    },
+    created(){
+
     }
 };
 </script>

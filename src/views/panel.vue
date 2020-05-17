@@ -7,7 +7,7 @@
         <splitpanes class="" style="height: 100vh;">
 
             <!-- PANE 1 (CODE EDITOR) -->
-            <pane :size="editorPanelSize" min-size="5">
+            <pane :size="editorPanelSize" min-size="5" >
                 <editor
                     class="has-background-black-bis"
                     @keyup.ctrl.enter.exact.native="execute()"
@@ -30,7 +30,7 @@
                         <div class="level-item">
                             <b-tooltip label="Clear output" type="is-dark" position="is-left" :delay="500" >
                             <div class="button is-dark is-small has-background-black-ter" @click="resetResult()" >
-                                <span class="icon">
+                                <span class="icon trash_icon">
                                     <i class="far fa-trash-alt"></i>
                                 </span>
                             </div>
@@ -42,6 +42,7 @@
                             <div class="button is-dark is-small has-background-black-ter is-paddingless" >
                             <b-tooltip :label="turnoffMessage" type="is-dark" position="is-left" :delay="500" >
                                 <b-switch
+                                    class="analysisSwitch"
                                     v-model="isAnalysisOn"
                                     size="is-small" 
                                     type="is-light" 
@@ -85,6 +86,7 @@
                             <div class="button is-dark is-small has-background-black-ter is-paddingless" >
                             <b-tooltip :label="turnoffMessage" type="is-dark" position="is-left" :delay="500" >
                                 <b-switch
+                                    class="analysisSwitch"
                                     v-model="isAnalysisOn"
                                     size="is-small" 
                                     type="is-light" 
@@ -402,6 +404,14 @@
 
 
 <style>
+
+.trash_icon:hover{
+    transform: scale(1.5);
+}
+
+.analysisSwitch {
+    transform: scale(0.8);
+}
 
 /* Buefy Collapse */
 a.card-header-icon {

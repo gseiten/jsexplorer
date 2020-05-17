@@ -1,7 +1,7 @@
 
 <template>
 
-    <div class="container is-fluid ">
+    <div class="main_container">
 
         <newpost :status="is_newpost_modal_open" @closeNewpostModal="closeNewpostModal" :key="is_newpost_modal_open" >
         </newpost>
@@ -39,7 +39,7 @@
                         <div class="media-content">
                             <div class="content">
                                 <p>
-                                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. At nulla explicabo inventore, commodi architecto et. Accusantium architecto beatae tempore ipsam?
+                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellat cumque et voluptates tempore quam libero nisi iste minima! Obcaecati eos rerum quis, velit nemo veniam.
                                 </p>
                             </div>
                             <nav class="level is-mobile is-paddingless">
@@ -237,6 +237,12 @@ export default {
             this.openNewPostModal()
         });
 
+        EventBus.$on('searchPosts', (text) => {
+            this.table_data = this.table_data.filter((obj) =>
+                obj['gender'] == text
+            );
+        });
+
         axios.get(this.users_url).then(response => {
             let users = response.data.results;
             users.forEach((user, index) => {
@@ -260,6 +266,10 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
+.main_container {
+    margin-right: 7px;
+}
 
 a {
     color: whitesmoke;

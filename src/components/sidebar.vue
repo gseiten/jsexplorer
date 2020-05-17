@@ -14,10 +14,9 @@
             >
                 <div class="p-1">
                     <div class="block">
-                    <img
-                        src="../assets/kludge_text.png"
-                        alt="Kludge"
-                    />
+                        <figure class="image">
+                            <img class="" :src="getProfilePicture()" alt="Kludge">
+                        </figure>
                     </div>
                     <b-menu class="is-custom-mobile">
                         <b-menu-list label="Menu" >
@@ -87,6 +86,10 @@ export default {
         changeRoute(path){
             this.$router.push(path).catch(err => {alert(err)});
             this.$store.commit("changeSelectedMenuOption", path);
+        }, 
+        getProfilePicture(){
+            return `https://robohash.org/${Math.ceil(Math.random() * 10)}` 
+            // return `https://api.adorable.io/avatars/${Math.ceil(Math.random() * 10)}`
         }
     },
     created(){

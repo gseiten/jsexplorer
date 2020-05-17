@@ -15,6 +15,12 @@ export default {
 
 <style lang="css">
 
+* {
+  /* for firefox's scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 100, 100, 0.8) rgba(0, 0, 0, 0.3);
+}
+
 ::-webkit-scrollbar {
     width: 0.3em;
 }
@@ -31,7 +37,6 @@ export default {
 ::-webkit-scrollbar-thumb:window-inactive {
     background: rgba(100, 100, 100, 0.4);
 }
-
 
 @import '../node_modules/buefy/dist/buefy.css';
 
@@ -86,18 +91,10 @@ export default {
   border-color: whitesmoke !important;
 }
 
-/* buefy taginput */
-.taginput .is-focused.taginput-container.is-focusable, .taginput .is-active.taginput-container.is-focusable, .taginput .taginput-container.is-focusable:active {
-  border: whitesmoke !important;
-  box-shadow: 0 0 0 0.125em whitesmoke !important;
-}
-
-
-
 /* Simple Markdown editor */
 @import '~simplemde/dist/simplemde.min.css';
 .CodeMirror , .CodeMirror-scroll {
-  min-height: 150px !important;
+  min-height: 120px !important;
 }
 
 </style>

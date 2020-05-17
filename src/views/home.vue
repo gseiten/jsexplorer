@@ -6,7 +6,7 @@
 <nav class="navbar is-fixed-top has-background-black-bis">
 
 	<div class="navbar-brand">
-		<div class="navbar-item">
+		<div class="navbar-item" style="width: 80px">
 			<img src="../assets/kludge1.png" alt="Kludge" style="width:30px; min-height:30px" />
 		</div>
 		<div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
@@ -16,11 +16,11 @@
 		</div>
 	</div>
 
-	<div id="navbarExampleTransparentExample" class="navbar-menu">
+	<div id="navbarExampleTransparentExample" class="navbar-menu" v-if="$route.name == 'panel'" >
+
 		<div class="navbar-start">
 			<a class="navbar-item has-background-black-bis">
-
-				<div class="buttons" v-if="$route.name == 'panel'" >
+				<div class="buttons">
 					<div class="button is-dark is-small" @click="emitGlobalExecutionEvent('execute')">
 						<span class="icon">
 							<i class="fas fa-play"></i>
@@ -34,28 +34,24 @@
 							<span class="is-size-6">Run</span>
 						</b-tooltip>
 					</div>
-
 					<div class="button is-dark is-small" disabled>
 						<span class="icon">
 							<i class="fas fa-save"></i>
 						</span>
 						<span class="is-size-6">Save</span>
 					</div>
-
 					<div class="button is-dark is-small" disabled>
 						<span class="icon">
 							<i class="fas fa-align-right"></i>
 						</span>
 						<span class="is-size-6">Beautify</span>
 					</div>
-
 					<div class="button is-dark is-small" disabled>
 						<span class="icon">
 							<i class="fas fa-share"></i>
 						</span>
 						<span class="is-size-6">Share</span>
 					</div>
-
 					<div class="button is-dark is-small" disabled>
 						<span class="icon">
 							<i class="fas fa-download"></i>
@@ -63,22 +59,10 @@
 						<span class="is-size-6">Download</span>
 					</div>
 				</div>
-
-				<div class="buttons" v-if="$route.name == 'forum'">
-					<div class="button is-dark is-small" @click="emitGlobalExecutionEvent('newpost')">
-						<span class="icon">
-							<i class="fas fa-plus"></i>
-						</span>
-						<span class="is-size-6">New Post</span>
-					</div>
-				</div>
-
-
-				
 			</a>
 		</div>
 
-		<div class="navbar-end" v-if="$route.name == 'panel'">
+		<div class="navbar-end">
 			<div class="navbar-item">
 				<v-select
 				style="min-width: 200px"
@@ -96,8 +80,39 @@
 				</b-dropdown>
 			</div>
 		</div>
-
 	</div>
+
+
+	<div class="navbar-menu" v-if="$route.name == 'forum'">
+		<div class="navbar-start">
+			<div class="navbar-item">
+				<div class="buttons" >
+					<div class="button is-dark is-small" @click="emitGlobalExecutionEvent('newpost')">
+						<span class="icon">
+							<i class="fas fa-plus"></i>
+						</span>
+						<span class="is-size-6">New Post</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="navbar-end">
+			<div class="navbar-item">
+				<b-field>
+					<b-input 
+						v-model="searchPostsText"
+						@keyup.enter.native="searchPosts"
+						custom-class="has-background-black-ter has-text-light search_input"
+						placeholder="Search..."
+						type="search"
+						icon="magnify">
+					</b-input>
+				</b-field>
+			</div>
+		</div>
+	</div>
+
+
 </nav>
 
 <div class="columns">
@@ -123,14 +138,18 @@ export default {
   },
   data() {
     return {
-      selectedLanguage: "JavaScript",
-      runMessage: "use ctrl+enter as shortcut. command+enter for mac."
+		selectedLanguage: "JavaScript",
+		runMessage: "use ctrl+enter as shortcut. command+enter for mac.",
+		searchPostsText: '',
     };
   },
   methods: {
     emitGlobalExecutionEvent(method) {
-      EventBus.$emit(method);
+		EventBus.$emit(method);
 	},
+	searchPosts(){
+		EventBus.$emit('searchPosts', this.searchPostsText)
+	}
 
 	
   },
@@ -146,4 +165,29 @@ export default {
 </script>
 
 <style>
+
+.navbar-brand .navbar-item img{
+	display:block;
+	margin:auto;
+}
+
+.search_input{
+	border: none !important;
+	box-shadow: none !important;
+	border-radius: 0% !important;
+}
+.search_input:hover{
+	border: 1px whitesmoke solid !important;
+}
+.search_input:focus{
+	width: 30em !important;
+	border: 1px whitesmoke solid !important;
+}
+.search_input::placeholder{
+	color: grey !important;
+}
+.control.has-icons-left .icon, .control.has-icons-right .icon {
+	color: grey !important;
+}
+
 </style>

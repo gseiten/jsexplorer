@@ -6,7 +6,7 @@
             <div class="modal-card">
                 <header class="modal-card-head">
                     <div class="modal-card-title">
-                        New Entry
+                        Create a public post
                     </div>
                     <button class="delete has-background-black-ter" aria-label="close"  @click="closeModal()">
                     </button>
@@ -15,15 +15,23 @@
                     </div>
                 </header>
 
-                <section class="modal-card-body has-background-light">
-                    <b-field label="">
+                <section class="modal-card-body has-background-light has-text-dark">
+                    <b-field label="Title" class="is-marginless">
+                        <b-input 
+                            v-model="post_title" 
+                            placeholder="Title" 
+                            has-counter
+                            maxlength="100">
+                        </b-input>
+                    </b-field>
+                    <b-field label="Add upto 5 relevant tags." custom-class="">
                         <b-taginput
                             v-model="selected_tags"
                             :data="filtered_tags"
                             autocomplete
                             field=""
                             icon="label"
-                            maxtags="10"
+                            maxtags="5"
                             type="is-dark"
                             :allow-new="true"
                             placeholder="Add relevant tags"
@@ -36,7 +44,18 @@
                             </template>
                         </b-taginput>
                     </b-field>
-                    <vue-simplemde ref="markdownEditor" />
+                    <b-field label="Body" class="">
+                        <vue-simplemde v-model="post_body" ref="markdownEditor" />
+                    </b-field>
+                    <b-field>
+                        <b-button 
+                            type="is-dark" 
+                            class="is-pulled-left" 
+                            :class="{'is-loading': is_submit_loading}" 
+                            @click="is_submit_loading = !is_submit_loading">
+                            Submit
+                        </b-button>
+                    </b-field>
                 </section>
                 
             </div>
@@ -59,6 +78,9 @@ export default {
             is_modal_fullscreen: false,
             filtered_tags: languages,
             selected_tags: [],
+            post_title: '',
+            post_body: '',
+            is_submit_loading: false,
         }
     },
     created(){

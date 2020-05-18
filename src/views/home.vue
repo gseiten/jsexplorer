@@ -6,7 +6,7 @@
 <nav class="navbar is-fixed-top has-background-black-bis">
 
 	<div class="navbar-brand">
-		<div class="navbar-item" style="width: 80px">
+		<div class="navbar-item">
 			<img src="../assets/kludge1.png" alt="Kludge" style="width:30px; min-height:30px" />
 		</div>
 		<div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
@@ -166,9 +166,17 @@ export default {
 
 <style>
 
+.navbar .navbar-brand .navbar-item{
+	width: 80px !important;
+}
+
 .navbar-brand .navbar-item img{
 	display:block;
 	margin:auto;
+}
+
+.navbar-menu .navbar-start .navbar-item {
+	padding-left: 0 !important;
 }
 
 .search_input{

@@ -3,7 +3,7 @@
 
     <div>
         <b-modal :active.sync="is_modal_open" has-modal-card :full-screen="is_modal_fullscreen" :can-cancel="false">
-            <div class="modal-card">
+            <div class="modal-card has-background-black-ter">
                 <header class="modal-card-head">
                     <div class="modal-card-title">
                         Create a public post
@@ -15,18 +15,20 @@
                     </div>
                 </header>
 
-                <section class="modal-card-body has-background-light has-text-dark">
-                    <b-field label="Title" class="is-marginless">
+                <section class="modal-card-body has-text-light">
+                    <b-field label="" class="">
                         <b-input 
                             v-model="post_title" 
+                            custom-class="has-background-black-ter has-text-light title_input"
                             placeholder="Title" 
                             has-counter
                             maxlength="100">
                         </b-input>
                     </b-field>
-                    <b-field label="Add upto 5 relevant tags." custom-class="">
+                    <b-field label="">
                         <b-taginput
                             v-model="selected_tags"
+                            custom-class="has-background-black-ter has-text-light tag_input"
                             :data="filtered_tags"
                             autocomplete
                             field=""
@@ -44,7 +46,7 @@
                             </template>
                         </b-taginput>
                     </b-field>
-                    <b-field label="Body" class="">
+                    <b-field label="" class="has-background-white">
                         <vue-simplemde v-model="post_body" ref="markdownEditor" />
                     </b-field>
                     <b-field>
@@ -137,6 +139,50 @@ export default {
 }
 
 
+/* ::v-deep is for deep selector to apply scoped level component css */
 
+::v-deep .title_input{
+	border: 1px rgb(83, 83, 83) solid !important;
+	box-shadow: none !important;
+	border-radius: 0% !important;
+    padding-right: 30px;
+}
+
+::v-deep .title_input:hover{
+	border: 1px whitesmoke solid !important;
+}
+
+::v-deep .title_input:focus{
+	border: 1px whitesmoke solid !important;
+}
+
+::v-deep .title_input::placeholder{
+	color: rgb(209, 209, 209) !important;
+}
+
+/* buefy character counter */
+
+::v-deep .control .help.counter {
+    margin: -22px 12px 0 0;
+    opacity: 0.8;
+}
+
+
+/* tag input buefy */
+
+::v-deep .taginput-container {
+    background-color: hsl(0, 0%, 14%) !important;
+    border: 1px rgb(83, 83, 83) solid !important;
+    border-radius: 0% !important;
+    box-shadow: none !important;
+}
+
+::v-deep .taginput-container:hover{
+	border: 1px whitesmoke solid !important;
+}
+
+::v-deep .tag_input::placeholder{
+	color: rgb(209, 209, 209) !important;
+}
 
 </style>

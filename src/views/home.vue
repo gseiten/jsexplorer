@@ -98,6 +98,13 @@
 		</div>
 		<div class="navbar-end">
 			<div class="navbar-item">
+				<v-select
+					class="posttype_class"
+					v-model="selectedPostType"
+					:options="['Challenges', 'Questions', 'Articles']"
+				></v-select>
+			</div>
+			<div class="navbar-item">
 				<b-field>
 					<b-input 
 						v-model="searchPostsText"
@@ -138,12 +145,14 @@ export default {
   },
   data() {
     return {
-		selectedLanguage: "JavaScript",
-		runMessage: "use ctrl+enter as shortcut. command+enter for mac.",
+		selectedLanguage: 'JavaScript',
+		runMessage: 'use ctrl+enter as shortcut. command+enter for mac.',
 		searchPostsText: '',
+		selectedPostType: 'Questions'
     };
   },
   methods: {
+
     emitGlobalExecutionEvent(method) {
 		EventBus.$emit(method);
 	},
@@ -151,7 +160,6 @@ export default {
 		EventBus.$emit('searchPosts', this.searchPostsText)
 	}
 
-	
   },
   watch: {
     selectedLanguage() {
@@ -162,6 +170,7 @@ export default {
     this.$store.commit("changeSelectedLanguage", this.selectedLanguage);
   }
 };
+
 </script>
 
 <style>
@@ -183,6 +192,7 @@ export default {
 	border: none !important;
 	box-shadow: none !important;
 	border-radius: 0% !important;
+	height: 33.5px !important;
 }
 .search_input:hover{
 	border: 1px whitesmoke solid !important;
@@ -197,5 +207,15 @@ export default {
 .control.has-icons-left .icon, .control.has-icons-right .icon {
 	color: grey !important;
 }
+
+
+/* v-select */
+.vs__dropdown-toggle{
+	border-radius: 0% !important;
+	min-width: 200px;
+}
+
+
+
 
 </style>

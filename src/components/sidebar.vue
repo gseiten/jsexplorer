@@ -84,7 +84,7 @@ export default {
     },
     methods: {
         changeRoute(path){
-            this.$router.push(path).catch(err => {alert(err)});
+            this.$router.push(path).catch(error => { this.$buefy.snackbar.open(error) });
             this.$store.commit("changeSelectedMenuOption", path);
         }, 
         getProfilePicture(){

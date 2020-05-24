@@ -71,12 +71,42 @@
 				></v-select>
 			</div>
 			<div class="navbar-item">
-				<b-dropdown position="is-bottom-left" append-to-body aria-role="menu" trap-focus>
+				<b-dropdown
+					position="is-bottom-left"
+					:scrollable="true"
+					v-model="selectedConfiguration"
+					aria-role="list" >
+					
 					<button class="button is-dark has-background-black-bis is-small" slot="trigger">
 						<b-icon pack="fas" icon="cog"></b-icon>
 					</button>
-					<b-dropdown-item>Editor Theme</b-dropdown-item>
-					<b-dropdown-item>Font Size</b-dropdown-item>
+
+					<b-dropdown-item @click="isLayoutVertical = !isLayoutVertical">
+						<div class="media">
+							<b-icon v-if="isLayoutVertical" class="media-left" icon="drag-vertical"></b-icon>
+							<b-icon v-else class="media-left" icon="drag-horizontal"></b-icon>
+							<div class="media-content">
+								<h3>Switch layout</h3>
+							</div>
+						</div>
+					</b-dropdown-item>
+					<b-dropdown-item>
+						<div class="media">
+							<b-icon class="media-left" icon="theme-light-dark"></b-icon>
+							<div class="media-content">
+								<h3>Editor Theme</h3>
+							</div>
+						</div>
+					</b-dropdown-item>
+					<b-dropdown-item>
+						<div class="media">
+							<b-icon class="media-left" icon="format-size"></b-icon>
+							<div class="media-content">
+								<h3>Font Size</h3>
+							</div>
+						</div>
+					</b-dropdown-item>
+
 				</b-dropdown>
 			</div>
 		</div>
@@ -123,10 +153,10 @@
 </nav>
 
 <div class="columns">
-	<div class="column is-narrow" style="padding-right: 0">
+	<div class="column is-narrow sidebar-column">
 		<sidebar></sidebar>
 	</div>
-	<div class="column" style="padding-left: 0">
+	<div class="column content-column">
 		<router-view></router-view>
 	</div>
 	</div>
@@ -139,41 +169,57 @@
 import { EventBus } from "../main.js";
 import sidebar from "../components/sidebar.vue";
 export default {
-  name: "home",
-  components: {
-    sidebar
-  },
-  data() {
-    return {
-		selectedLanguage: 'JavaScript',
-		runMessage: 'use ctrl+enter as shortcut. command+enter for mac.',
-		searchPostsText: '',
-		selectedPostType: 'Questions'
-    };
-  },
-  methods: {
-
-    emitGlobalExecutionEvent(method) {
-		EventBus.$emit(method);
+	name: "home",
+	components: { sidebar },
+	data() {
+		return {
+			selectedLanguage: 'JavaScript',
+			runMessage: 'use ctrl+enter as shortcut. command+enter for mac.',
+			searchPostsText: '',
+			selectedPostType: 'Questions',
+			selectedConfiguration: '',
+			isLayoutVertical: true,
+		};
 	},
-	searchPosts(){
-		EventBus.$emit('searchPosts', this.searchPostsText)
-	}
+	methods: {
 
-  },
-  watch: {
-    selectedLanguage() {
-      this.$store.commit("changeSelectedLanguage", this.selectedLanguage);
-    }
-  },
-  created() {
-    this.$store.commit("changeSelectedLanguage", this.selectedLanguage);
-  }
+		emitGlobalExecutionEvent(method){
+			EventBus.$emit(method);
+		},
+		searchPosts(){
+			EventBus.$emit('searchPosts', this.searchPostsText)
+		}
+
+	},
+	watch: {
+		selectedLanguage(){
+			this.$store.commit("changeSelectedLanguage", this.selectedLanguage);
+		},
+		isLayoutVertical(){
+			this.$store.commit("switchSplitpanesLayout", this.isLayoutVertical);
+		}
+	},
+	created(){
+		this.$store.commit("changeSelectedLanguage", this.selectedLanguage);
+	}
 };
 
 </script>
 
 <style>
+
+.columns {
+	height: 100vh;
+}
+.sidebar-column{
+	padding-right: 0 !important;
+	padding-bottom: 0 !important;
+}
+.content-column{
+	padding-left: 0 !important;
+	padding-bottom: 0 !important;
+} 
+
 
 .navbar .navbar-brand .navbar-item{
 	width: 80px !important;
@@ -192,7 +238,7 @@ export default {
 	border: none !important;
 	box-shadow: none !important;
 	border-radius: 0% !important;
-	height: 33.5px !important;
+	height: 33px !important;
 }
 .search_input:hover{
 	border: 1px whitesmoke solid !important;
@@ -216,6 +262,17 @@ export default {
 }
 
 
+/* buefy dropdown */
+.dropdown-content{
+	background-color: hsl(0, 0%, 7%) !important;
+}
+.dropdown-content .dropdown-item {
+	color: white !important;
+}
+.dropdown-content .dropdown-item:hover {
+	color: white !important;
+	background-color: hsl(0, 0%, 29%) !important;
+}
 
 
 </style>

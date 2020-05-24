@@ -22,26 +22,31 @@ for num in range(lower, upper + 1):
 
            
     js: `
-// Hello.
-//
-// This is Kludge, a tool that helps to detect errors and potential
-// problems in your code.
-//
-// To start, simply enter some code anywhere on this editor and press ctrl+enter. Your
-// report will appear on the right side.
-//
-// Additionally, you can toggle specific options in the Configure
-// menu.
+/*
 
-function abc(m,n){
-    console.log("shubham");
+Hello.
+
+This is Kludge, a tool that helps to detect errors and potential problems in your code.
+
+To start, simply enter some code anywhere on this editor and press ctrl/cmd + enter. 
+Your report will appear on the right side.
+
+Additionally, you can toggle specific options in the Configure menu.
+
+*/
+
+function sum() {
+    var retval = 0;
+    for (var i = 0, len = arguments.length; i < len; ++i) {
+        retval += arguments[i];
+    }
+    return retval;
 }
 
-function def(p,r){
-    console.log("bhardwaj");
-}
+let result = sum(1, 2, 3);
+console.log(result);
 
-def();`,
+`,
 
 
 

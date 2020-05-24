@@ -1,3 +1,4 @@
+
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
@@ -10,6 +11,7 @@ export const store = new Vuex.Store({
     state: {
         selectedLanguage: "",
         selectedMenuOption: "",
+        isLayoutVertical: true,
     },
     mutations: {
         changeSelectedLanguage (state, language) {
@@ -17,10 +19,14 @@ export const store = new Vuex.Store({
         },
         changeSelectedMenuOption (state, option) {
             state.selectedMenuOption = option;
+        },
+        switchSplitpanesLayout (state, option) {
+            state.isLayoutVertical = option;
         }
     },
     getters: {
         selectedLanguage: state => state.selectedLanguage,
         selectedMenuOption: state => state.selectedMenuOption,
+        isLayoutVertical: state => state.isLayoutVertical,
     }
 })

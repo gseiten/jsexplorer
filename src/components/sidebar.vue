@@ -9,7 +9,6 @@
                 :expand-on-hover="expandOnHover"
                 :reduce="reduce"
                 type="is-dark"
-				style="height: 100vh;"
                 open
             >
                 <div class="p-1">

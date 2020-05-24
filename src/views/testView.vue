@@ -3,142 +3,165 @@
 <template>
 <!-- padding-top due to fixed navbar -->
 
+<div class="container is-fluid" style="height: 800px" >
 
-<div class="" >
-<!-- <split-pane :min-percent='10' :default-percent='70' split="vertical">
-    <template slot="paneL">
-        <div v-for="i in 15" :key="i">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. In odit, reiciendis totam itaque dolorem autem qui? Nesciunt libero eius esse optio et quod atque perferendis quidem neque, aspernatur cum rerum!
-        </div>
-    </template>
-    <template slot="paneR" style="overflow-y: scroll">
-        <div v-for="i in 115" :key="i">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. In odit, reiciendis totam itaque dolorem autem qui? Nesciunt libero eius esse optio et quod atque perferendis quidem neque, aspernatur cum rerum!
-        </div>
-    </template>
-</split-pane> -->
-<splitpanes class="has-text-light" style="height: 100vh">
-  <pane class="resContainer">
-    <div v-for="i in 10" :key="i">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere nemo quas praesentium veniam nihil nisi architecto qui, enim iure culpa vel. Voluptas earum architecto eius tempore dolorum quo iste laboriosam.</div>
-  </pane>
-  <pane class="resContainer">
-    <div v-for="i in 10" :key="i">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere nemo quas praesentium veniam nihil nisi architecto qui, enim iure culpa vel. Voluptas earum architecto eius tempore dolorum quo iste laboriosam.</div>
-  </pane>
-  <pane class="resContainer">
-      <div class="">
-        <div v-for="i in 100" :key="i">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere nemo quas praesentium veniam nihil nisi architecto qui, enim iure culpa vel. Voluptas earum architecto eius tempore dolorum quo iste laboriosam.</div>
-      </div>
-  </pane>
-</splitpanes>
+    <splitpanes @resize="paneResized" class="has-text-light">
+        <pane :size="editorPaneSize" min-size="5">
+            <editor
+                :key="editorPaneSize"
+                class="has-background-black-bis main_editor"
+                ref='myEditor'
+                v-model="code"
+                @init="editorInit"
+                lang="javascript"
+                theme="monokai">
+            </editor>
+        </pane>
+        <pane :size="secondPaneSize" min-size="5">
+            <b-dropdown aria-role="list" :scrollable="true" :max-height="10">
+                <a slot="trigger" role="button">
+                    <span>Font Size</span>
+                    <b-icon size="" icon="menu-down"></b-icon>
+                </a>
+                <b-dropdown-item 
+                    v-for="(item, index) in 10"
+                    :key="index"
+                    :value="item" aria-role="listitem">
+                        <div class="media">
+                        <b-icon class="media-left" icon="user"></b-icon>
+                        <div class="media-content">
+                            <h3>{{item}}</h3>
+                        </div>
+                    </div>
+                </b-dropdown-item>
+            </b-dropdown>
+        </pane>
+        <pane :size="thirdPaneSize" min-size="5">
+            <b-dropdown
+                scrollable="true"
+                max-height="100"
+                v-model="selectedFontSize"
+                aria-role="list"
+            >
+                <button class="button is-primary" type="button" slot="trigger">
+                    <template>
+                        <b-icon icon="user"></b-icon>
+                        <span>{{selectedFontSize}}</span>
+                    </template>
+                    <b-icon icon="menu-down"></b-icon>
+                </button>
+
+                <b-dropdown-item 
+                    v-for="(item, index) in fontSizes"
+                    :key="index"
+                    :value="item" aria-role="listitem">
+                    <div class="media">
+                        <b-icon class="media-left" icon="account"></b-icon>
+                        <div class="media-content">
+                            <h3>{{item}}</h3>
+                        </div>
+                    </div>
+                </b-dropdown-item>
+            </b-dropdown>
+        </pane>
+    </splitpanes>
 
 </div>
 
-
-
-       
 </template>
 
 <script>
 
-import { Splitpanes, Pane } from 'splitpanes'
-import 'splitpanes/dist/splitpanes.css'
+import { Splitpanes, Pane } from 'splitpanes';
+import 'splitpanes/dist/splitpanes.css';
+var code_snippet =  require('../constants/code_snippets.js');
 
 export default {
 	name: "testView",
-	components: {Splitpanes, Pane},
+	components: {
+        Splitpanes, Pane,
+        editor: require('vue2-ace-editor'),    
+    },
 	data() {
 		return {
 			expandOnHover: false,
-      mobile: "reduce",
-      reduce: false
+            mobile: "reduce",
+            reduce: false,
+            code: code_snippet.js,
+            editorPaneSize: 0,
+            secondPaneSize: 0, 
+            thirdPaneSize: 0,
+            fontSizes: [12,13,14,15,16,17,18,19,20,21],
+            selectedFontSize: 12,
 		};
-	}
+    },
+    mounted(){},
+
+    methods: {
+
+        // panelReady(){
+        //     this.editorPanelSize = 60;
+        //     this.secondPanelSize = 40;
+        //     // this.thirdPanelSize = 20;
+        // },
+
+        paneResized(event){
+            this.editorPaneSize = event[0].size;
+            this.secondPaneSize = event[1].size;
+            this.thirdPaneSize = event[2].size;
+        },
+       
+        editorInit: function (editor) {
+            /* 'editor' arg is ACE's instance. Another way is; let editor = this.$refs.myEditor.editor */
+            editor.setShowPrintMargin(false);
+            editor.setFontSize("20px");
+            editor.getSession().setUseWrapMode(true);
+            require("brace/ext/beautify")
+            require('brace/ext/language_tools') //language extension prerequsite...
+            require('brace/mode/html')
+            require('brace/mode/javascript')    //language
+            require('brace/mode/python')
+            require('brace/mode/less')
+            require('brace/theme/chrome')
+            require('brace/theme/vibrant_ink')
+            require('brace/theme/monokai')
+            require('brace/snippets/javascript') //snippet
+        },
+    },
+
 };
 </script>
 
 <style lang="scss">
 
-// .resContainer {
-//     overflow-y: auto;
-//     height: 100%;
-//     white-space: pre-line;
-// }
+.resContainer {
+    overflow-y: auto;
+    height: 100%;
+    white-space: pre-line;
+}
 
-.p-1 {
-  padding: 1em;
+.splitpanes {
+    background-color: hsl(0, 0%, 7%);
+    /* background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB); */
 }
-.sidebar-page {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    min-height: 100%;
-    .sidebar-layout {
-        display: flex;
-        flex-direction: row;
-        min-height: 100%;
-    }
+
+.splitpanes__pane {
+    box-shadow: 0 0 5px rgba(0, 0, 0, .2) inset;
+    justify-content: center;
+    align-items: center;
+    /* display: flex; */
 }
-@media screen and (max-width: 1023px) {
-    .b-sidebar {
-        .sidebar-content {
-            &.is-mini-mobile {
-                &:not(.is-mini-expand),
-                &.is-mini-expand:not(:hover) {
-                    .menu-list {
-                        li {
-                            a {
-                                span:nth-child(2) {
-                                    display: none;
-                                }
-                            }
-                            ul {
-                                padding-left: 0;
-                                li {
-                                    a {
-                                        display: inline-block;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .menu-label:not(:last-child) {
-                        margin-bottom: 0;
-                    }
-                }
-            }
-        }
-    }
+
+.splitpanes--vertical > .splitpanes__splitter {
+  min-width: 6px;
+  background-color: hsl(0, 0%, 10%);
+  /* background: linear-gradient(90deg, #ccc, #111); */
 }
-@media screen and (min-width: 1024px) {
-    .b-sidebar {
-        .sidebar-content {
-            &.is-mini {
-                &:not(.is-mini-expand),
-                &.is-mini-expand:not(:hover) {
-                    .menu-list {
-                        li {
-                            a {
-                                span:nth-child(2) {
-                                    display: none;
-                                }
-                            }
-                            ul {
-                                padding-left: 0;
-                                li {
-                                    a {
-                                        display: inline-block;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .menu-label:not(:last-child) {
-                        margin-bottom: 0;
-                    }
-                }
-            }
-        }
-    }
+
+.splitpanes--horizontal > .splitpanes__splitter {
+  min-height: 6px;
+  background-color: hsl(0, 0%, 10%);
+  /* background: linear-gradient(0deg, #ccc, #111); */
 }
 
 </style>

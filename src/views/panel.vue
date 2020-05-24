@@ -1,26 +1,63 @@
 
 <template>
 
-    <div class="has-background-black-bis has-text-light">
-    
+    <div class="has-background-black-bis has-text-light" style="height: 100%">
 
-        <splitpanes class="" style="height: 100vh;">
+        <splitpanes @ready="splitpanesReady" @resize="splitpanesResized" @pane-add="paneAdded" :horizontal="isLayoutVertical" >
 
             <!-- PANE 1 (CODE EDITOR) -->
-            <pane :size="editorPanelSize" min-size="5" >
+            <pane :size="editorPanelSize" min-size="10" >
+
+                <div class="level editor-configs has-background-black-ter is-marginless">  
+                    <div class="level-left is-unselectable">
+                        <b-icon size="is-small" icon="sliders-h" pack="fas" class="has-text-grey"></b-icon>
+                        <div class="level-item item-editor-theme">
+                            <b-dropdown v-model="selectedTheme" aria-role="list" :scrollable="true" :max-height="200">
+                                <a slot="trigger" role="button">
+                                    <span>{{ selectedTheme.name }}</span>
+                                    <b-icon size="" icon="menu-down"></b-icon>
+                                </a>
+                                <b-dropdown-item 
+                                    v-for="(item, index) in editorThemes"
+                                    :key="index"
+                                    :value="item" aria-role="listitem">
+                                    {{ item.name }}
+                                </b-dropdown-item>
+                            </b-dropdown>
+                        </div>
+                        <div class="level-item item-font-size">
+                            <b-dropdown v-model="selectedFontSize" aria-role="list" :scrollable="true" :max-height="200">
+                                <a slot="trigger" role="button">
+                                    <span>{{selectedFontSize}}</span>
+                                    <b-icon size="" icon="menu-down"></b-icon>
+                                </a>
+                                <b-dropdown-item 
+                                    v-for="(item, index) in fontSizes"
+                                    :key="index"
+                                    :value="item" aria-role="listitem">
+                                    {{ item }}
+                                </b-dropdown-item>
+                            </b-dropdown>
+                        </div>
+                    </div>
+                </div>
+
                 <editor
+                    :key="editorPanelSize"
                     class="has-background-black-bis"
                     @keyup.ctrl.enter.exact.native="execute()"
+                    @keydown.ctrl.83.exact.native.prevent.stop="saveCode"
                     ref='myEditor'
                     v-model="code"
                     @init="editorInit"
                     :lang="lang"
-                    theme="monokai">
+                    :theme="selectedTheme.value">
                 </editor>
+
             </pane>
 
             <!-- PANE 2 (OUTPUT) -->
-            <pane class="resContainer" :size="outputPanelSize" min-size="5">
+            <pane class="resContainer" :size="outputPanelSize" min-size="10">
 
                 <nav class="level has-background-black-ter console_level">
                     <div class="level-left">
@@ -37,10 +74,9 @@
                             </b-tooltip>
                         </div>
 
-                        <!-- This will show up on output's panel when analysis is off. -->
                         <div class="level-item" v-if="!isAnalysisOn">
                             <div class="button is-dark is-small has-background-black-ter is-paddingless" >
-                            <b-tooltip :label="turnoffMessage" type="is-dark" position="is-left" :delay="500" >
+                            <b-tooltip label="Switch on Code Analysis" type="is-dark" position="is-left" :delay="500" >
                                 <b-switch
                                     class="analysisSwitch"
                                     v-model="isAnalysisOn"
@@ -54,19 +90,15 @@
                         </div>
                     </div>
                 </nav>
-                
+
                 <div class="list is-hoverable has-background-black-bis is-size-6" >
                     <div
-                        style="border-bottom: 1px solid #202020"
-                        class="list-item has-text-light is-family-code" 
+                        class="list-item success-list-item is-family-code" 
                         v-for="(el, index) in result" 
                         v-bind:key="index">
                         {{ el }}
                     </div>
-                    <div
-                        v-if="error != ''"
-                        class="list-item has-text-light"
-                        style="background-color: rgba(255,0,0,0.2)">
+                    <div v-if="error" class="list-item error-list-item">
                         {{ error }}
                     </div>
                 </div>
@@ -84,74 +116,19 @@
                     <div class="level-right">
                         <div class="level-item">
                             <div class="button is-dark is-small has-background-black-ter is-paddingless" >
-                            <b-tooltip :label="turnoffMessage" type="is-dark" position="is-left" :delay="500" >
+                            <b-tooltip label="switch off Code Analysis" type="is-dark" position="is-left" :delay="500" >
                                 <b-switch
                                     class="analysisSwitch"
                                     v-model="isAnalysisOn"
                                     size="is-small" 
                                     type="is-light" 
-                                    :outlined="true" 
-                                >
+                                    :outlined="true" >
                                 </b-switch>
                             </b-tooltip>
                             </div>
                         </div>
                     </div>
                 </nav>
-
-                <!-- {{ code_snippet }} -->
-                <!-- <div v-if="fileInfo.length">
-                    <div class="content has-text-light">
-                        <ol type="1">
-                            <li>
-                                <p class="has-text-light is-marginless" v-if="fileInfo.length == 1">
-                                    There is only {{ fileInfo.length }} function in this file.
-                                </p>
-                                <p class="has-text-light is-marginless" v-else>
-                                    There are {{ fileInfo.length }} functions in this file.
-                                </p>
-                                <b-collapse :open="false" position="is-bottom" aria-id="contentIdForA11y1">
-                                    <a slot="trigger" slot-scope="props" aria-controls="contentIdForA11y1">
-                                        <b-icon :icon="!props.open ? 'caret-down' : 'caret-up'" pack="fas" ></b-icon>
-                                        {{ !props.open ? 'Show detail' : 'Hide detail' }}
-                                    </a>
-                                    <div class="list">
-                                        <div
-                                            type="I"
-                                            style="border-bottom: 1px solid #202020; border-radius: 0"
-                                            class="list-item has-background-black-bis has-text-light" 
-                                            v-for="(el, index) in fileInfo" 
-                                            :key="index">
-
-                                                <div class="is-italic" v-if="el.name">
-                                                    {{ el.name }}
-                                                </div>
-                                                <div class="is-italic" v-else>
-                                                    It's an IIFE.
-                                                </div>
-                                                <div v-if="el.params.length">
-                                                    It has {{ el.params.length }} parameters.
-                                                </div>
-                                                <div v-if="el.variables">
-                                                    Has {{ el.variables }} local variable(s).
-                                                </div>
-                                                <div v-if="el.isEmpty">
-                                                    It is empty.
-                                                </div>
-                                                <div v-if="el.isGenerator">
-                                                    It is a generator.
-                                                </div>
-                                        </div>
-                                    </div>
-                                </b-collapse>
-                            </li>
-                        </ol>
-                    </div>
-                </div> -->
-
-
-                <!-- complexity report -->
-                <!-- Object.keys(obj).length === 0 && obj.constructor === Object -->
 
                 <b-collapse
                     
@@ -227,41 +204,53 @@
 
         data() {
             return {
-
                 isOpen: 0,
                 complexity_report: [],
-
                 lang: "javascript",
                 result: [],
                 error: "",
                 fileInfo: [],
-
                 code: code_snippet.js, // js is a property of code_snippet object.
+                editorPanelSize: 0,
+                outputPanelSize: 0,
+                analysisPanelSize: 0,
+                isAnalysisOn: false,
 
-                cmOptions: {
-                    tabSize: 4,
-                    mode: 'text/javascript',
-                    theme: 'monokai',
-                    lineNumbers: true,
-                    line: true,
-                },
-
-                editorPanelSize: 60,
-                outputPanelSize: 20,
-                analysisPanelSize: 20,
-
-                turnoffMessage: 'switch off code analysis',
-                isAnalysisOn: true,
-
-
+                // Editor (User's settings)
+                fontSizes: [12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30],
+                selectedFontSize: 20,
+                editorThemes: [
+                    {name: 'Monokai', value: 'monokai'},
+                    {name: 'Vibrant Ink', value: 'vibrant_ink'},
+                    {name: 'Tomorrow Night', value: 'tomorrow_night'},
+                    {name: 'Gruvbox', value: 'gruvbox'},
+                    {name: 'Twilight', value: 'twilight'}
+                ],
+                selectedTheme: {name: 'Monokai', value: 'monokai'},
             }
         },
 
 
         methods: {
 
-            editorInit: function () {
+            splitpanesReady(){},
 
+            splitpanesResized(event){
+                this.editorPanelSize = event[0].size;
+                this.outputPanelSize = event[1].size;
+                if(this.isAnalysisOn)
+                    this.analysisPanelSize = event[2].size;
+            },
+
+            paneAdded(){
+                this.editorPanelSize = this.outputPanelSize = this.analysisPanelSize = 100/3;
+            },
+
+            editorInit: function (editor) {
+                /* 'editor' arg is ACE's instance. Another way is; let editor = this.$refs.myEditor.editor */
+                editor.setShowPrintMargin(false);
+                editor.setFontSize('20px');
+                editor.getSession().setUseWrapMode(true);
                 require("brace/ext/beautify")
                 require('brace/ext/language_tools') //language extension prerequsite...
                 require('brace/mode/html')
@@ -270,25 +259,22 @@
                 require('brace/mode/less')
                 require('brace/theme/chrome')
                 require('brace/theme/vibrant_ink')
+                require('brace/theme/gruvbox')
                 require('brace/theme/monokai')
+                require('brace/theme/tomorrow_night')
+                require('brace/theme/twilight')
                 require('brace/snippets/javascript') //snippet
-                
             },
 
             execute: function(){
 
-                axios.post('/api/js', 
-                    {
+                axios.post('/api/js', {
                         'code': this.code,
                         'lang': this.lang,
                         'analysis': this.isAnalysisOn
-                    },
-                    {
-                        headers: { 
-                            'Content-Type': 'application/json',
-                    }
-                }).then(response => {
-
+                    }, { headers: {  'Content-Type': 'application/json'}
+                })
+                .then(response => {
                     if(response.data.result != ""){
                         this.result.push(response.data.result);}
                     this.error = response.data.error;
@@ -302,60 +288,49 @@
                     if(response.data.complexity_report){
                         if(Object.keys(response.data['complexity_report']).length === 0 && 
                             response.data['complexity_report'].constructor === Object) {
-                                console.log("Complexity report is empty!!")
+                                // console.log("Complexity report is empty!!")
                             }
                         else {
                             this.complexity_report = response.data['complexity_report']
                         }
                     }
-
                 }).catch(function(error) {
                     alert(error);
+                }).then(() => {
+                    // always execute
                 });
 
             },
 
-            resetResult: function(){
+            saveCode: function(){
+                this.$buefy.snackbar.open("Code updated.")
+            },
 
+            resetResult: function(){
                 this.result = [];
                 this.error = "";
-
             },
 
             scrollToEnd: function(){
-
                 var container = document.querySelector('.resContainer');
                 var scrollHeight = container.scrollHeight;
                 container.scrollTop = scrollHeight;
-                
             }
 
-
         },
 
-
-        mounted(){
-
-            var editor = this.$refs.myEditor.editor;
-            editor.setShowPrintMargin(false);
-            editor.setFontSize("20px");
+        mounted() {
             this.scrollToEnd();
-
         },
 
-        updated(){
-
+        updated() {
             this.scrollToEnd();
-        
         },
 
-        created(){
-
+        created() {
             EventBus.$on('execute', () => {
-                // You can then call your method attached to this component here
                 this.execute()
             });
-
         },
 
         beforeDestroy () {
@@ -365,27 +340,13 @@
         computed: {
             selectedLanguage(){
                 return this.$store.getters['selectedLanguage']
+            },
+            isLayoutVertical(){
+                return this.$store.getters['isLayoutVertical']
             }
         },
 
         watch: {
-
-            isAnalysisOn() {
-
-                if(this.isAnalysisOn) { 
-                    this.editorPanelSize = 60;
-                    this.outputPanelSize = 20;
-                    this.analysisPanelSize = 20;
-                    this.turnoffMessage = 'switch off code analysis.'
-                } else {
-                    this.editorPanelSize = 70;
-                    this.outputPanelSize = 100 - this.editorPanelSize;
-                    this.turnoffMessage = 'switch on code analysis.'
-                    this.complexity_report = [];
-                }
-
-            },
-
             selectedLanguage(newVal) {
                 this.lang = newVal.toLowerCase();
                 if(this.lang === 'python'){
@@ -393,19 +354,37 @@
                 } else if(this.lang === 'javascript'){
                     this.code = code_snippet.js;
                 }
+            },
 
-
+            selectedFontSize(){
+                let editor = this.$refs.myEditor.editor;
+                editor.setFontSize(this.selectedFontSize+'px');
             }
         },
 
 
     }
+
 </script>
 
 
 <style>
 
-.trash_icon:hover{
+.list .list-item{
+    border-radius: 0% !important;
+}
+.list .success-list-item{
+    color: whitesmoke;
+    border-bottom: 1px solid #3a3a3a !important;
+}
+.list .error-list-item{
+    color: whitesmoke;
+    border-bottom: 1px solid #3a3a3a !important;
+    background-color: rgb(49, 3, 3);
+}
+
+
+.trash_icon:hover{  
     transform: scale(1.5);
 }
 
@@ -438,22 +417,46 @@ a.card-header-icon {
 
 .splitpanes--horizontal > .splitpanes__splitter {
   min-height: 6px;
-  background: linear-gradient(0deg, #ccc, #111);
+  background-color: hsl(0, 0%, 10%);
+  /* background: linear-gradient(0deg, #ccc, #111); */
 }
 
 .resContainer {
-    padding: 0.5em;
+    /* padding: 0.5em; */
     overflow-y: auto;
     height: 100%;
     white-space: pre-line;
 }
 
-
-
-
 .console_level{
     padding-left: 0.5em;
     margin-bottom: 0.2em !important;
 }
+
+
+/* editor configs */
+
+.editor-configs .level-left{
+    padding-left: 0.5rem;
+}
+.item-editor-theme a{
+    color: grey;
+    font-size: 1rem;
+    padding-left: 1em;
+}
+.item-editor-theme a:hover, .item-font-size a:hover{
+    color: whitesmoke;
+}
+.item-editor-theme .dropdown .dropdown-content .dropdown-item.is-active,
+.item-font-size .dropdown .dropdown-content .dropdown-item.is-active  {
+    background-color: grey !important;
+}
+.item-font-size a{
+    color: grey;
+    font-size: 1rem;
+    padding-left: 0.5em;
+}
+
+
 
 </style>

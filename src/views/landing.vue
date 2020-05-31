@@ -1,6 +1,6 @@
 
 <template>
-    <div class="has-background-black-ter" style="">
+    <div class="has-background-black-ter" style="height: 100vh">
 
         <nav class="navbar is-dark has-background-black-ter is-fixed-top">
 

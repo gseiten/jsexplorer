@@ -268,6 +268,8 @@ export default {
 <style lang="css" scoped>
 
 .main_container {
+    height: 100%;
+    overflow-y: auto;
     margin-right: 7px;
 }
 
@@ -287,7 +289,9 @@ strong {
 }
 
 .main_table {
-    max-height: calc(100vh - 60px);
+    height: 100% !important;
+    /* max-height: calc(100vh - 3.2em) !important;  */
+    /* max-height: calc(100vh - 60px); */
     overflow-y: scroll;
     overflow-x: hidden;
 }

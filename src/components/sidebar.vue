@@ -1,7 +1,8 @@
 <template>
-    <div class="sidebar-page">
+    
+    <div class="sidebar-page has-background-black-bis">
         <section class="sidebar-layout">
-             <b-sidebar
+            <b-sidebar
                 position="static"
 				:fullheight="true"
                 :fullwidth="false"
@@ -19,6 +20,13 @@
                     </div>
                     <b-menu class="is-custom-mobile">
                         <b-menu-list label="Menu" >
+
+                            <b-menu-item
+                                icon="account" 
+                                label="My Profile"
+                                :active="this.$store.getters.selectedMenuOption == 'profile' ? true : false"
+                                @click="changeRoute('profile')">
+                            </b-menu-item>
 
                             <b-menu-item
                                 icon="code-tags" 
@@ -57,7 +65,8 @@
                         </b-menu-list>
 						<b-menu-list label="Misc.">
                             <b-menu-item icon="rss" label="Blog"></b-menu-item>
-                            <b-menu-item icon="panda" label="Test View" @click="changeRoute('test-view')"></b-menu-item>
+                            <b-menu-item icon="cat" label="Test View" @click="changeRoute('test-view')"></b-menu-item>
+                            <b-menu-item icon="dog" label="Test View 2" @click="changeRoute('test-view-2')"></b-menu-item>
                         </b-menu-list>
                     </b-menu>
                 </div>
@@ -68,8 +77,6 @@
 </template>
 
 <script>
-
-
 
 export default {
 	name: "sidebar",
@@ -91,27 +98,30 @@ export default {
             // return `https://api.adorable.io/avatars/${Math.ceil(Math.random() * 10)}`
         }
     },
-    created(){
-
-    }
+    created(){}
 };
 </script>
 
 <style lang="scss">
+
 .p-1 {
   padding: 1em;
 }
+
 .sidebar-page {
+
     display: flex;
     flex-direction: column;
-    width: 100%;
-    min-height: 100%;
+    // height: calc(100vh - 3.25em);
+    // width: 100%;
+    // min-height: 100%;
     .sidebar-layout {
         display: flex;
         flex-direction: row;
         min-height: 100%;
     }
 }
+
 @media screen and (max-width: 1023px) {
     .b-sidebar {
         .sidebar-content {

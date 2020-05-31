@@ -1,7 +1,7 @@
 
 <template>
 
-<div class="has-background-black-bis">
+<div>
 
 <nav class="navbar is-fixed-top has-background-black-bis">
 
@@ -63,6 +63,7 @@
 		</div>
 
 		<div class="navbar-end">
+
 			<div class="navbar-item">
 				<v-select
 				style="min-width: 200px"
@@ -150,13 +151,30 @@
 	</div>
 
 
+
+	<div class="navbar-menu" v-if="$route.name == 'profile'">
+		<div class="navbar-end">
+			<div class="navbar-item">
+				<b-field>
+					<b-input 
+						custom-class="has-background-black-ter has-text-light search_input"
+						placeholder="Search..."
+						type="search"
+						icon="magnify">
+					</b-input>
+				</b-field>
+			</div>
+		</div>
+	</div>
+
+
 </nav>
 
-<div class="columns">
-	<div class="column is-narrow sidebar-column">
+<div class="columns is-marginless">
+	<div class="column is-narrow sidebar-column has-background-black-bis is-paddingless">
 		<sidebar></sidebar>
 	</div>
-	<div class="column content-column">
+	<div class="column content-column has-background-black-bis is-paddingless">
 		<router-view></router-view>
 	</div>
 	</div>
@@ -173,10 +191,8 @@ export default {
 	components: { sidebar },
 	data() {
 		return {
-			selectedLanguage: 'JavaScript',
 			runMessage: 'use ctrl+enter as shortcut. command+enter for mac.',
 			searchPostsText: '',
-			selectedPostType: 'Questions',
 			selectedConfiguration: '',
 			isLayoutVertical: true,
 		};
@@ -191,17 +207,34 @@ export default {
 		}
 
 	},
-	watch: {
-		selectedLanguage(){
-			this.$store.commit("changeSelectedLanguage", this.selectedLanguage);
+
+	computed: {
+		selectedLanguage: {
+			get(){
+				return this.$store.getters['selectedLanguage']
+			},
+			set(value){
+				this.$store.commit("changeSelectedLanguage", value);
+			}
 		},
+		selectedPostType: {
+			get(){
+				return this.$store.getters['selectedPostType']
+			},
+			set(value){
+				this.$store.commit("changePostType", value);
+			}
+		}
+	},
+
+	watch: {
 		isLayoutVertical(){
 			this.$store.commit("switchSplitpanesLayout", this.isLayoutVertical);
 		}
 	},
-	created(){
-		this.$store.commit("changeSelectedLanguage", this.selectedLanguage);
-	}
+
+	created(){}
+
 };
 
 </script>
@@ -209,17 +242,40 @@ export default {
 <style>
 
 .columns {
-	height: 100vh;
+	height: 100%;
+	min-height: calc(100vh - 3.25em);
+	/* height: calc(100vh - 3.25em); */
 }
-.sidebar-column{
-	padding-right: 0 !important;
-	padding-bottom: 0 !important;
-}
-.content-column{
-	padding-left: 0 !important;
-	padding-bottom: 0 !important;
-} 
 
+* {
+	/* for firefox's scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 100, 100, 0.8) hsl(0, 0%, 7%);
+}
+
+::-webkit-scrollbar {
+    width: 0.3em;
+}
+
+::-webkit-scrollbar-track {
+	background: hsl(0, 0%, 7%) !important;
+    /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(100, 100, 100, 0.8);
+}
+
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(100, 100, 100, 0.4);
+}
+
+
+/* make all buttons of every component curve-less */
+.button{
+	border-radius: 0% !important;
+}
 
 .navbar .navbar-brand .navbar-item{
 	width: 80px !important;

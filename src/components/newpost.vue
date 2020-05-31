@@ -16,6 +16,28 @@
                 </header>
 
                 <section class="modal-card-body has-text-light">
+
+                    <div class="block post-types-class">
+                        <b-radio v-model="post_type"
+                            type="is-light"
+                            name="name"
+                            native-value="article">
+                            <span :class="{'has-text-light': post_type=='article' }"> Publish an article </span>
+                        </b-radio>
+                        <b-radio v-model="post_type"
+                            type="is-light"
+                            name="name"
+                            native-value="question">
+                            <span :class="{'has-text-light': post_type=='question' }"> Ask a question </span>
+                        </b-radio>
+                        <b-radio v-model="post_type"
+                            type="is-light"
+                            name="name"
+                            native-value="challenge">
+                            <span :class="{'has-text-light': post_type=='challenge' }"> Post a challenge </span>
+                        </b-radio>
+                    </div>
+
                     <b-field label="" class="">
                         <b-input 
                             v-model="post_title" 
@@ -52,7 +74,7 @@
                     <b-field>
                         <b-button 
                             type="is-dark" 
-                            class="is-pulled-left" 
+                            class="is-pulled-right" 
                             :class="{'is-loading': is_submit_loading}" 
                             @click="is_submit_loading = !is_submit_loading">
                             Submit
@@ -82,6 +104,7 @@ export default {
             selected_tags: [],
             post_title: '',
             post_body: '',
+            post_type: 'article',
             is_submit_loading: false,
         }
     },
@@ -183,6 +206,17 @@ export default {
 
 ::v-deep .tag_input::placeholder{
 	color: rgb(209, 209, 209) !important;
+}
+
+/* Buefy Radio */
+::v-deep .b-radio .control-label:hover{
+    color: whitesmoke;
+}
+::v-deep .b-radio .control-label{
+    color: grey;
+}
+.post-types-class{
+    margin-bottom: 0.75rem !important;
 }
 
 </style>

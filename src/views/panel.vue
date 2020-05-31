@@ -1,14 +1,22 @@
 
 <template>
 
-    <div class="has-background-black-bis has-text-light" style="height: 100%">
+    <div class="main-class has-background-black-bis has-text-light" >
 
-        <splitpanes @ready="splitpanesReady" @resize="splitpanesResized" @pane-add="paneAdded" :horizontal="isLayoutVertical" >
+
+        <!-- // ! Left for Tabs  -->
+        <!-- <div class="level has-background-black-bis is-marginless">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora, optio!
+        </div> -->
+
+
+
+        <splitpanes @ready="splitpanesReady" @resize="splitpanesResized" @pane-add="paneAdded" :horizontal="!isLayoutVertical" >
 
             <!-- PANE 1 (CODE EDITOR) -->
             <pane :size="editorPanelSize" min-size="10" >
 
-                <div class="level editor-configs has-background-black-ter is-marginless">  
+                <div class="level editor-configs has-background-black-ter is-marginless"> 
                     <div class="level-left is-unselectable">
                         <b-icon size="is-small" icon="sliders-h" pack="fas" class="has-text-grey"></b-icon>
                         <div class="level-item item-editor-theme">
@@ -44,7 +52,7 @@
 
                 <editor
                     :key="editorPanelSize"
-                    class="has-background-black-bis"
+                    class="has-background-black-bis editor-class"
                     @keyup.ctrl.enter.exact.native="execute()"
                     @keydown.ctrl.83.exact.native.prevent.stop="saveCode"
                     ref='myEditor'
@@ -206,11 +214,9 @@
             return {
                 isOpen: 0,
                 complexity_report: [],
-                lang: "javascript",
                 result: [],
                 error: "",
                 fileInfo: [],
-                code: code_snippet.js, // js is a property of code_snippet object.
                 editorPanelSize: 0,
                 outputPanelSize: 0,
                 analysisPanelSize: 0,
@@ -296,14 +302,12 @@
                     }
                 }).catch(function(error) {
                     alert(error);
-                }).then(() => {
-                    // always execute
-                });
+                }).then(() => {});
 
             },
 
             saveCode: function(){
-                this.$buefy.snackbar.open("Code updated.")
+                this.$buefy.snackbar.open("Code saved.")
             },
 
             resetResult: function(){
@@ -338,16 +342,26 @@
         },
 
         computed: {
-            selectedLanguage(){
-                return this.$store.getters['selectedLanguage']
+
+            // * two-way computed property with a setter.
+            code: {
+                get(){ return this.$store.getters['code'] },
+                set(value){ this.$store.commit('holdTheCode', value)}
+            },
+            lang: {
+                get(){ return this.$store.getters['selectedLanguage'].toLowerCase() },
+                set(){}
             },
             isLayoutVertical(){
                 return this.$store.getters['isLayoutVertical']
             }
+            
         },
 
         watch: {
-            selectedLanguage(newVal) {
+
+            //  whenever the value of computed property "lang" changes, a code snippet is provided for the newly selected language as we are   watching "lang". NOTE that this will only happen on lang change and not on page refresh. "code" persists on page refresh.
+            lang(newVal) {
                 this.lang = newVal.toLowerCase();
                 if(this.lang === 'python'){
                     this.code = code_snippet.py; 
@@ -355,7 +369,6 @@
                     this.code = code_snippet.js;
                 }
             },
-
             selectedFontSize(){
                 let editor = this.$refs.myEditor.editor;
                 editor.setFontSize(this.selectedFontSize+'px');
@@ -369,6 +382,16 @@
 
 
 <style>
+
+/* important */
+.main-class {
+    height: calc(100vh - 3.5em) !important;
+}
+.editor-class{
+    height: calc(100vh - 4.2em) !important;
+}
+
+
 
 .list .list-item{
     border-radius: 0% !important;

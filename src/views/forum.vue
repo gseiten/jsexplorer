@@ -70,7 +70,7 @@
                 
             </template>
 
-            <template slot="empty">
+            <template slot="empty" v-if="table_data">
                 <section class="section">
                     <div class="content has-text-grey has-text-centered">
                         <p>
@@ -212,6 +212,7 @@ export default {
         return {
             users_url: 'https://randomuser.me/api/?results=30&inc=gender,name,nat,dob,picture',
             table_data: [],
+            table_data_loader: false,
             opened_conversation: {},
             is_modal_open: false,
             is_modal_fullscreen: false,
@@ -243,6 +244,7 @@ export default {
             );
         });
 
+        this.table_data_loader = true;
         axios.get(this.users_url).then(response => {
             let users = response.data.results;
             users.forEach((user, index) => {
@@ -254,7 +256,12 @@ export default {
                     'picture': user.picture.thumbnail
                 })
             });
+        }).catch(error => {
+            this.$buefy.snackbar.open({message: error.response, type: 'is-danger'});
+        }).then(() => {
+            this.table_data_loader = false;
         })
+
     },
     beforeDestroy () {
         EventBus.$off('askquestion', this.askquestion)

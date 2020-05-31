@@ -5,9 +5,14 @@
 	<article class="media profile-banner">
 
 		<figure class="media-left">
-			<p class="image is-128x128">
-				<img src="https://api.adorable.io/avatars/2">
+			<p class="image is-128x128" >
+				<img :src="profilepicture">
 			</p>
+			<b-upload v-model="profilepicture_file" class="editprofilepic__button" @input="updateProfilePicture">
+				<div class="button is-dark">
+					<i class="fas fa-edit"></i>	
+				</div>
+			</b-upload>
 		</figure>
 
 		<div class="media-content">
@@ -15,7 +20,7 @@
 				<div class="columns">
 					<div class="column is-6">
 						<div class="is-size-3">
-							Shubham Bhardwaj
+							Shubham Bhardwaj <span class="has-text-grey is-italic is-size-5">@gseiten</span>
 						</div>
 						<p class="bio is-size-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est modi perspiciatis ipsum? Eos fugiat consequuntur unde sit dolores veritatis.</p>
 					</div>
@@ -33,11 +38,7 @@
 					</div>
 				</div>
 			</div>
-			
 		</div>
-
-		<!-- <div class="media-right">
-		</div> -->
 
 	</article>
 
@@ -108,9 +109,21 @@ export default {
 			saved_articles: [],
 			questions_asked: [],
 			active_challenges: [],
+			profilepicture: 'https://api.adorable.io/avatars/2',
+			profilepicture_file: null,
 		}
 	},
-	methods: {},
+	methods: {
+
+		updateProfilePicture(file){
+			const reader = new FileReader();
+			reader.addEventListener('load', (result) => {
+				this.profilepicture = result.target.result;
+			});
+			reader.readAsDataURL(file);
+		}
+
+	},
 
 	created(){
 
@@ -131,9 +144,32 @@ export default {
 
 <style lang="css" scoped>
 
+
+
+.profile-banner .media-left {
+	position: relative;
+}
+
+.editprofilepic__button{
+	font-size: 13px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	display: none;
+}
+
+.editprofilepic__button:hover{
+	display: block;
+}
+
+.profile-banner .media-left .image:hover + .editprofilepic__button{
+	display: block;
+}
+
+
 .main-container {
 	height: 100%;
-	margin-right: 7px;
+	margin-right: 12px;
 	padding-bottom: 2em;
 }
 
@@ -145,25 +181,30 @@ export default {
 	padding: 0;
 }
 
-.profile-list .list-item {
-	color: whitesmoke;
-	border-bottom-color: hsl(0, 0%, 19%);
+::v-deep .b-tabs .tabs ul{
+	background-color: hsl(0, 0%, 7%)
 }
 
-.profile-list .list-item:hover {
-	background-color: hsl(0, 0%, 14%);
+::v-deep .b-tabs .tabs li.is-active span{
+    color: whitesmoke;
 }
+::v-deep .b-tabs .tabs li.is-active a{
+    color: whitesmoke;
+	border-bottom-color: yellow	;
+}
+
+
+/* deep because "columns" from "home" was messing with columns of this components. "min-height" specifically */
+::v-deep .profile-banner .media-content .content .columns{
+	min-height: 100%
+}
+
 
 .profile-banner{
-	background-color: hsl(0, 0%, 7%);
+	/* background-color: hsl(0, 0%, 7%); */
 	height: 170px;
 	padding: 15px;
-	/* overflow-y: auto; */
-}
-
-.profile-list{
-	border-radius: 0%;
-	background-color: hsl(0, 0%, 10%);
+	overflow-y: auto;
 }
 
 .stat-val {
@@ -177,18 +218,20 @@ export default {
 	font-weight: 200
 }
 
-
-::v-deep .b-tabs .tabs ul{
-	background-color: hsl(0, 0%, 7%)
+.profile-list{
+	border-radius: 0%;
+	background-color: hsl(0, 0%, 10%);
 }
 
-::v-deep .b-tabs .tabs li.is-active span{
-    color: whitesmoke;
+.profile-list .list-item {
+	color: whitesmoke;
+	border-bottom-color: hsl(0, 0%, 19%);
 }
-::v-deep .b-tabs .tabs li.is-active a{
-    color: whitesmoke;
-	border-bottom-color: yellow	;
+
+.profile-list .list-item:hover {
+	background-color: hsl(0, 0%, 14%);
 }
+
 
 
 

@@ -2,15 +2,6 @@
 <template>
 
     <div class="main-container">
-
-        <!-- <div class="level has-background-black-ter">
-            <div class="level-left">
-                <div class="level-item">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Error officiis veritatis deleniti, placeat omnis totam quod ut eveniet! Blanditiis laborum iste praesentium, tenetur ipsum quibusdam dolore itaque voluptas rerum eligendi.
-                </div>
-            </div>
-        </div> -->
-
         <div class="main-content">
             <div class="card" v-for="(item, index) in articles" :key="index">
                 <div class="card-content">
@@ -23,7 +14,6 @@
                 </div>
             </div>
         </div>
-    
     </div>
     
 </template>
@@ -54,11 +44,6 @@ export default {
 </script>
 
 <style lang="css" scoped>
-
-/* .main-container{
-    margin-left: 12px;
-    margin-right: 12px;
-} */
 
 .main-container .level{
     margin: 0 22px;

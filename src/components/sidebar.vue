@@ -108,6 +108,12 @@ export default {
   padding: 1em;
 }
 
+.menu-list li a:hover{
+    background-color: hsl(0, 0%, 14%);
+    color: whitesmoke;
+}
+
+
 .sidebar-page {
 
     display: flex;

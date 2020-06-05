@@ -274,7 +274,7 @@
 
             execute: function(){
 
-                axios.post('/api/js', {
+                axios.post('/api/code', {
                         'code': this.code,
                         'lang': this.lang,
                         'analysis': this.isAnalysisOn

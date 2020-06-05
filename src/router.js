@@ -61,6 +61,11 @@ const router = new Router({
         }
 
     ]
-})
+});
+
+
+// router.beforeEach((to, from, next) => {
+//     console.log(from + ' --> ' + to + ' --> ' + next);
+// })
 
 export default router;

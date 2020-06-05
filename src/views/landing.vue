@@ -2,58 +2,52 @@
 <template>
     <div class="has-background-black-ter" style="">
 
-        <nav class="navbar is-dark has-background-black-ter is-fixed-top">
+		<nav class="navbar is-dark has-background-black-ter is-fixed-top">
 
-          <div class="navbar-brand">
-            <a class="navbar-item" href="#">
-              <img src="../assets/kludge1.png" alt="Kludge" style="width:50px; min-height:50px">
-            </a>
-            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample"
-				:class="{'is-active': isBurgerOpen}" @click="isBurgerOpen = !isBurgerOpen"
+		<div class="navbar-brand">
+			<a class="navbar-item" href="#">
+				<img src="../assets/kludge1.png" alt="Kludge" style="width:50px; min-height:50px">
+			</a>
+			<a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample"
+			:class="{'is-active': isBurgerOpen}" @click="isBurgerOpen = !isBurgerOpen"
 			>
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
 				<span aria-hidden="true"></span>
 			</a>
-          </div>
+		</div>
 
-          <div class="navbar-menu has-background-black-ter" id="navbarExampleTransparentExample" :class="{'is-active': isBurgerOpen}">
-            <div class="navbar-start">
-              <a class="navbar-item has-text-light" href="#">
-                Home
-              </a>
-              <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link has-text-light" href="#">
-                  Features
-                </a>
-              </div>
-            </div>
-            <div class="navbar-end">
-              <div class="navbar-item">
-                <div class="field is-grouped">
-                  <p class="control">
-                      <router-link to="/panel">
-                          <a class="button is-dark" href="/panel">
-                            <span class="icon">
-                              <i class="fas fa-plus"></i>
-                            </span>
-                            <span>
-                              Start
-                            </span>
-                          </a>
-                      </router-link>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+		<div class="navbar-menu has-background-black-ter" id="navbarExampleTransparentExample" :class="{'is-active': isBurgerOpen}">
+			<div class="navbar-start">
+				<a class="navbar-item has-text-light" href="#">
+					Home
+				</a>
+				<div class="navbar-item has-dropdown is-hoverable">
+					<a class="navbar-link has-text-light" href="#">
+						Features
+					</a>
+				</div>
+			</div>
+			<div class="navbar-end">
+				<div class="navbar-item">
+					<div class="field is-grouped">
+						<p class="control">
+							<a class="button is-dark" @click="openNewPostModal">
+								<span class="icon">
+									<i class="fas fa-plus"></i>
+								</span>
+								<span>
+									Start
+								</span>
+							</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
 
+		</nav>
 
-
-        </nav>
-
-        <!-- <vue-particles color="#fff" style="position: absolute">
-		</vue-particles> -->
 
 		<div class="container" style="">
         <div class="columns">
@@ -91,20 +85,34 @@
 
 
 
+		<loginModal :status="is_login_modal_open" :key="is_login_modal_open" @closeLoginModal="closeLoginModal"></loginModal>
+
 
     </div>
 </template>
 
 <script>
 
+	import loginModal from '../components/login'
+
     export default {
         name: "landing",
         components: {
-
+			loginModal
         },
 		data() {
 			return {
 				isBurgerOpen: false,
+				is_login_modal_open: false,
+			}
+		},
+		methods: {
+
+			openNewPostModal(){
+				this.is_login_modal_open = true;
+			},
+			closeLoginModal(value){
+				this.is_login_modal_open = value;
 			}
 		}
     }

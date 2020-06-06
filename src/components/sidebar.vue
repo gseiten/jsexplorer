@@ -13,9 +13,9 @@
                 open
             >
                 <div class="p-1">
-                    <div class="block">
+                    <div class="block" v-if="currentRouteName != 'profile'"> <!-- Hide the image if route is 'profile' -->
                         <figure class="image">
-                            <img class="" :src="getProfilePicture()" alt="Kludge">
+                            <img class="is-rounded" :src="getProfilePicture()" alt="Kludge">
                         </figure>
                     </div>
                     <b-menu class="is-custom-mobile">
@@ -60,8 +60,11 @@
                             <b-menu-item label="Expo" icon="link"></b-menu-item>
                         </b-menu-list>
                         <b-menu-list label="Actions">
-							<b-menu-item icon="login" label="Login"></b-menu-item>
-							<b-menu-item icon="account-plus" label="Register"></b-menu-item>
+							<b-menu-item 
+                                @click="logoutUser"
+                                icon="logout" 
+                                label="Logout">
+                            </b-menu-item>
                         </b-menu-list>
 						<b-menu-list label="Misc.">
                             <b-menu-item icon="rss" label="Blog"></b-menu-item>
@@ -78,24 +81,44 @@
 
 <script>
 
+import axios from 'axios';
+
 export default {
 	name: "sidebar",
 	components: {},
 	data() {
 		return {
+            loggedInUser: this.$store.getters.loggedInUser,
 			expandOnHover: true,
 			mobile: "reduce",
             reduce: true,
 		};
     },
     methods: {
-        changeRoute(path){
-            this.$router.push(path).catch(error => { this.$buefy.snackbar.open(error) });
-            this.$store.commit("changeSelectedMenuOption", path);
+        changeRoute(pathname){
+            this.$router.push({name: pathname}).catch(error => { this.$buefy.snackbar.open(error) });
+            this.$store.commit("changeSelectedMenuOption", pathname);
         }, 
         getProfilePicture(){
+            if(this.loggedInUser.thumbnail)
+                return this.loggedInUser.thumbnail;
             return `https://robohash.org/${Math.ceil(Math.random() * 10)}` 
-            // return `https://api.adorable.io/avatars/${Math.ceil(Math.random() * 10)}`
+        },
+        logoutUser(){
+            axios.get('/api/auth/logout').then(response => {
+                if(response.data){ // User is successfully logged out from backend.
+                    this.$store.commit('setLoggedInUser', null); // reflect that in vuex.
+                    window.localStorage.removeItem('vuex'); // Empty the localstorage too. The former is redundant now.
+                    this.$router.push({name: 'landing'}).catch(error => { this.$buefy.snackbar.open(error) });
+                }
+            }).catch(error => {
+                this.$buefy.snackbar.open({message: error});
+            });
+        },
+    },
+    computed: {
+        currentRouteName(){
+            return this.$route.name;
         }
     },
     created(){}

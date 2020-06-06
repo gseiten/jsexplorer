@@ -1,7 +1,7 @@
 
 import Vue from 'vue';
 import Router from 'vue-router';
-Vue.use(Router);
+import { store } from "./store/store";
 
 import home from './views/home.vue';
 import profile from './views/profile.vue';
@@ -11,6 +11,8 @@ import testView2 from './views/testView2.vue';
 import landing from './views/landing.vue';
 import resources from './views/resources.vue';
 import forum from './views/forum.vue';
+
+Vue.use(Router);
 
 const router = new Router({
     routes: [
@@ -25,6 +27,7 @@ const router = new Router({
             path: '/home',
             name: 'home',
             component: home,
+            meta: { 'requiresAuth': true },
             children: [
                 {
                     path: '/profile',
@@ -64,8 +67,20 @@ const router = new Router({
 });
 
 
-// router.beforeEach((to, from, next) => {
-//     console.log(from + ' --> ' + to + ' --> ' + next);
-// })
+
+router.beforeEach((to, from, next) => {
+    if(to.matched.some(record => record.meta.requiresAuth)){
+        if(!store.getters.loggedInUser){
+            // ! User is not logged in. redirect to /landing.
+            next({name: "landing"});
+        } else {
+            // * Logged in.
+            next();
+        }
+    } else {
+        // * route doesn't require auth. keep going.
+        next();
+    }
+});
 
 export default router;

@@ -6,7 +6,8 @@
 
 		<figure class="media-left">
 			<p class="image is-128x128" >
-				<img :src="profilepicture">
+				<img v-if="loggedInUser.thumbnail" :src="loggedInUser.thumbnail">
+				<img v-else :src="profilepicture">
 			</p>
 			<b-upload v-model="profilepicture_file" class="editprofilepic__button" @input="updateProfilePicture">
 				<div class="button is-dark">
@@ -20,7 +21,7 @@
 				<div class="columns">
 					<div class="column is-6">
 						<div class="is-size-3">
-							Shubham Bhardwaj <span class="has-text-grey is-italic is-size-5">@gseiten</span>
+							{{ loggedInUser.username }}
 						</div>
 						<p class="bio is-size-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est modi perspiciatis ipsum? Eos fugiat consequuntur unde sit dolores veritatis.</p>
 					</div>
@@ -104,6 +105,7 @@ export default {
 	components: {},
 	data() {
 	return {
+			loggedInUser: this.$store.getters.loggedInUser,
 			activeTab: 0,
 			your_projects: [],
 			saved_articles: [],

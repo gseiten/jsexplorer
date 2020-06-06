@@ -2,23 +2,26 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-const code_snippet =  require('../constants/code_snippets.js');
+const codeSnippet =  require('../constants/code_snippets.js');
 
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-    plugins: [createPersistedState({
-        storage: window.sessionStorage,
-    })],
+    plugins: [createPersistedState()],
     state: {
+        // * Logged in user.
+        loggedInUser: null,
         // * Some default starting values are given.
-        code: code_snippet.js,
+        code: codeSnippet.js,
         selectedLanguage: "JavaScript",
-        selectedMenuOption: "panel",
+        selectedMenuOption: "profile",
         isLayoutVertical: true,
         selectedPostType: "Questions",
     },
     mutations: {
+        setLoggedInUser(state, user){
+            state.loggedInUser = user;
+        },
         holdTheCode(state, code){
             state.code = code;
         },
@@ -36,10 +39,11 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
+        loggedInUser: state => state.loggedInUser,
         code: state => state.code,
         selectedLanguage: state => state.selectedLanguage,
         selectedMenuOption: state => state.selectedMenuOption,
         isLayoutVertical: state => state.isLayoutVertical,
         selectedPostType: state => state.selectedPostType
     }
-})
+});

@@ -38,7 +38,7 @@
         </pane>
         <pane :size="thirdPaneSize" min-size="5">
             <b-dropdown
-                scrollable="true"
+                :scrollable="true"
                 max-height="100"
                 v-model="selectedFontSize"
                 aria-role="list"

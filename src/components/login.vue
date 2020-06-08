@@ -133,6 +133,11 @@ export default {
 
 .modal-card-title{
     width: 100%;
+    padding: 15px;
+}
+
+.modal-card-head{
+    border: none;
 }
 
 .modal-card .modal-card-head .modal-card-title {

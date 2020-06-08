@@ -1,8 +1,7 @@
-
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-const codeSnippet =  require('../constants/code_snippets.js');
+const codeSnippet = require('../constants/code_snippets.js');
 
 Vue.use(Vuex);
 
@@ -19,22 +18,22 @@ export const store = new Vuex.Store({
         selectedPostType: "Questions",
     },
     mutations: {
-        setLoggedInUser(state, user){
+        setLoggedInUser(state, user) {
             state.loggedInUser = user;
         },
-        holdTheCode(state, code){
+        holdTheCode(state, code) {
             state.code = code;
         },
-        changeSelectedLanguage(state, language){
+        changeSelectedLanguage(state, language) {
             state.selectedLanguage = language;
         },
-        changeSelectedMenuOption(state, option){
+        changeSelectedMenuOption(state, option) {
             state.selectedMenuOption = option;
         },
-        switchSplitpanesLayout(state, option){
+        switchSplitpanesLayout(state, option) {
             state.isLayoutVertical = option;
         },
-        changePostType(state, type){
+        changePostType(state, type) {
             state.selectedPostType = type;
         }
     },

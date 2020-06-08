@@ -68,8 +68,8 @@
                         </b-menu-list>
 						<b-menu-list label="Misc.">
                             <b-menu-item icon="rss" label="Blog"></b-menu-item>
-                            <b-menu-item icon="cat" label="Test View" @click="changeRoute('test-view')"></b-menu-item>
-                            <b-menu-item icon="dog" label="Test View 2" @click="changeRoute('test-view-2')"></b-menu-item>
+                            <b-menu-item icon="cat" label="Test View" @click="changeRoute('testView')"></b-menu-item>
+                            <b-menu-item icon="dog" label="Test View 2" @click="changeRoute('testView2')"></b-menu-item>
                         </b-menu-list>
                     </b-menu>
                 </div>
@@ -105,14 +105,26 @@ export default {
             return `https://robohash.org/${Math.ceil(Math.random() * 10)}` 
         },
         logoutUser(){
-            axios.get('/api/auth/logout').then(response => {
-                if(response.data){ // User is successfully logged out from backend.
-                    this.$store.commit('setLoggedInUser', null); // reflect that in vuex.
-                    window.localStorage.removeItem('vuex'); // Empty the localstorage too. The former is redundant now.
-                    this.$router.push({name: 'landing'}).catch(error => { this.$buefy.snackbar.open(error) });
+            this.$buefy.dialog.confirm({
+                title: 'Confirm Logout',
+                message: 'Are you sure you want to logout?',
+                cancelText: 'Cancel',
+                confirmText: 'Yes',
+                type: 'is-dark',
+                iconPack: 'fa',
+                icon: 'question-circle',
+                hasIcon: true,
+                onConfirm: () => {
+                    axios.get('/api/auth/logout').then(response => {
+                        if(response.data){ // User is successfully logged out from backend.
+                            this.$store.commit('setLoggedInUser', null); // reflect that in vuex.
+                            window.localStorage.removeItem('vuex'); // Empty the localstorage too. The former is redundant now.
+                            this.$router.push({name: 'landing'}).catch(error => { this.$buefy.snackbar.open(error) });
+                        }
+                    }).catch(error => {
+                        this.$buefy.snackbar.open({message: error});
+                    });
                 }
-            }).catch(error => {
-                this.$buefy.snackbar.open({message: error});
             });
         },
     },
@@ -138,7 +150,6 @@ export default {
 
 
 .sidebar-page {
-
     display: flex;
     flex-direction: column;
     // height: calc(100vh - 3.25em);
@@ -213,4 +224,49 @@ export default {
         }
     }
 }
+
+
+
+// Dialog Modal
+.dialog {
+
+    .modal-card-head, .modal-card-body, .modal-card-foot, .modal-card-title{
+        background-color: hsl(0, 0%, 14%);
+        color: whitesmoke;
+        border: none;
+        border-radius: 0%;
+    }
+
+    .modal-card-body .media-content {
+        margin: auto;
+    }
+
+    .modal-card-foot .button:last-child{
+        background-color: hsl(0, 0%, 21%);
+        border: none;
+        box-shadow: none !important;
+        color: whitesmoke;
+    }
+
+    .modal-card-foot .button:last-child:hover{
+        background-color: hsl(0, 0%, 14%);
+        border: none;
+    }
+
+    .modal-card-foot .button:first-child{
+        background-color: hsl(0, 0%, 14%);
+        border: none;
+        box-shadow: none !important;
+        color: whitesmoke;
+    }
+
+    .modal-card-body i{
+        color: whitesmoke;
+    }
+   
+}
+
+
+
+
 </style>

@@ -4,7 +4,7 @@
 
     <div class="container is-fluid has-text-light">
 
-        <b-tabs type="" size="" v-model="activeTab" :multiline="multiline">
+        <!-- <b-tabs type="" size="" v-model="activeTab" :multiline="multiline">
 
             <template v-for="(tab, index) in tabs">
                 <b-tab-item :key="index" >
@@ -17,7 +17,14 @@
                 </b-tab-item>
             </template>
 
-        </b-tabs>
+        </b-tabs> -->
+
+        <p
+            contenteditable
+            @input="onInput"
+        >
+            {{ content }}
+        </p>
         
     </div>
     
@@ -30,6 +37,7 @@ export default {
     components: {},
     data(){
         return{
+            content: 'hello world',
             tabs: [
                 {label: 'Tab 1', content: 'tab 1 content'},
                 {label: 'Tab 2', content: 'tab 2 content'},
@@ -41,6 +49,9 @@ export default {
         }
     },
     methods:{
+        onInput(e) {
+            console.log(e.target.innerText);
+        },
         changeTabName(){
             alert('Change tab name')
         },

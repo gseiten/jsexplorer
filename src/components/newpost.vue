@@ -11,7 +11,8 @@
                     <button class="delete has-background-black-ter" aria-label="close"  @click="closeModal()">
                     </button>
                     <div class="button is-dark is-small" @click="is_modal_fullscreen = !is_modal_fullscreen">
-                        <i class="fas fa-compress"></i>
+                        <i v-if="is_modal_fullscreen" class="fas fa-compress"></i>
+                        <i v-else class="fas fa-expand"></i>
                     </div>
                 </header>
 

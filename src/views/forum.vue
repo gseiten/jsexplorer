@@ -18,10 +18,15 @@
                 pagination-size="is-small"
                 @click="conversationClicked"
             >
-                <template slot-scope="props">
-                    <b-table-column field label="Board">
-                        <template slot="header" slot-scope="{ column }">{{ column.label }}</template>
-
+                <b-table-column field label="Board">
+                    <template v-slot:header="{ column }">
+                        <b-tooltip
+                            type="is-dark"
+                            :label="column.label"
+                            append-to-body
+                        >{{ column.label }}</b-tooltip>
+                    </template>
+                    <template v-slot="props">
                         <article class="media">
                             <figure class="media-left is-paddingless">
                                 <p class="image is-48x48">
@@ -59,8 +64,8 @@
                                 </nav>
                             </div>
                         </article>
-                    </b-table-column>
-                </template>
+                    </template>
+                </b-table-column>
 
                 <template slot="empty" v-if="table_data">
                     <section class="section">
@@ -275,6 +280,7 @@ export default {
     height: 100%;
     overflow-y: auto;
     margin-right: 7px;
+    padding-bottom: 2em;
 }
 
 a {
@@ -296,7 +302,7 @@ strong {
     height: 100% !important;
     /* max-height: calc(100vh - 3.2em) !important;  */
     /* max-height: calc(100vh - 60px); */
-    overflow-y: scroll;
+    overflow-y: hidden;
     overflow-x: hidden;
 }
 

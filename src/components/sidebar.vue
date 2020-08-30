@@ -1,10 +1,9 @@
 <template>
-    
     <div class="sidebar-page has-background-black-bis">
         <section class="sidebar-layout">
             <b-sidebar
                 position="static"
-				:fullheight="true"
+                :fullheight="true"
                 :fullwidth="false"
                 :mobile="mobile"
                 :expand-on-hover="expandOnHover"
@@ -13,34 +12,39 @@
                 open
             >
                 <div class="p-1">
-                    <div class="block" v-if="currentRouteName != 'profile'"> <!-- Hide the image if route is 'profile' -->
+                    <div class="block" v-if="currentRouteName != 'profile'">
+                        <!-- Hide the image if route is 'profile' -->
                         <figure class="image">
-                            <img class="is-rounded" :src="getProfilePicture()" alt="Kludge">
+                            <img
+                                class="is-rounded"
+                                :src="getProfilePicture()"
+                                alt="Kludge"
+                                referrerpolicy="no-referrer"
+                            />
                         </figure>
                     </div>
                     <b-menu class="is-custom-mobile">
-                        <b-menu-list label="Menu" >
-
+                        <b-menu-list label="Menu">
                             <b-menu-item
-                                icon="account" 
+                                icon="account"
                                 label="My Profile"
                                 :active="this.$store.getters.selectedMenuOption == 'profile' ? true : false"
-                                @click="changeRoute('profile')">
-                            </b-menu-item>
+                                @click="changeRoute('profile')"
+                            ></b-menu-item>
 
                             <b-menu-item
-                                icon="code-tags" 
+                                icon="code-tags"
                                 label="Code Editor"
                                 :active="this.$store.getters.selectedMenuOption == 'panel' ? true : false"
-                                @click="changeRoute('panel')">
-                            </b-menu-item>
+                                @click="changeRoute('panel')"
+                            ></b-menu-item>
 
-                            <b-menu-item 
-                                icon="book" 
-                                label="Learn Programming" 
+                            <b-menu-item
+                                icon="book"
+                                label="Learn Programming"
                                 :active="this.$store.getters.selectedMenuOption == 'resources' ? true : false"
-                                @click="changeRoute('resources')">
-                            </b-menu-item>
+                                @click="changeRoute('resources')"
+                            ></b-menu-item>
 
                             <b-menu-item icon="shield-account" label="Administrator">
                                 <b-menu-item icon="account" label="Users"></b-menu-item>
@@ -48,33 +52,35 @@
                                 <b-menu-item icon="cash-multiple" label="Payments" disabled></b-menu-item>
                             </b-menu-item>
 
-                            <b-menu-item 
-                                icon="forum" 
-                                label="Public Space" 
+                            <b-menu-item
+                                icon="forum"
+                                label="Public Space"
                                 :active="this.$store.getters.selectedMenuOption == 'forum' ? true : false"
-                                @click="changeRoute('forum')">
-                            </b-menu-item>
-
+                                @click="changeRoute('forum')"
+                            ></b-menu-item>
                         </b-menu-list>
                         <b-menu-list>
                             <b-menu-item label="Expo" icon="link"></b-menu-item>
                         </b-menu-list>
                         <b-menu-list label="Actions">
-							<b-menu-item 
-                                @click="logoutUser"
-                                icon="logout" 
-                                label="Logout">
-                            </b-menu-item>
+                            <b-menu-item @click="logoutUser" icon="logout" label="Logout"></b-menu-item>
                         </b-menu-list>
-						<b-menu-list label="Misc.">
+                        <b-menu-list label="Misc.">
                             <b-menu-item icon="rss" label="Blog"></b-menu-item>
-                            <b-menu-item icon="cat" label="Test View" @click="changeRoute('testView')"></b-menu-item>
-                            <b-menu-item icon="dog" label="Test View 2" @click="changeRoute('testView2')"></b-menu-item>
+                            <b-menu-item
+                                icon="cat"
+                                label="Test View"
+                                @click="changeRoute('testView')"
+                            ></b-menu-item>
+                            <b-menu-item
+                                icon="dog"
+                                label="Test View 2"
+                                @click="changeRoute('testView2')"
+                            ></b-menu-item>
                         </b-menu-list>
                     </b-menu>
                 </div>
             </b-sidebar>
-
         </section>
     </div>
 </template>
@@ -96,9 +102,11 @@ export default {
     },
     methods: {
         changeRoute(pathname){
-            this.$router.push({name: pathname}).catch(error => { this.$buefy.snackbar.open(error) });
+            this.$router.push({name: pathname}).catch(error => { 
+                this.$buefy.snackbar.open(error.name);
+            });
             this.$store.commit("changeSelectedMenuOption", pathname);
-        }, 
+        },
         getProfilePicture(){
             if(this.loggedInUser.thumbnail)
                 return this.loggedInUser.thumbnail;
@@ -138,16 +146,14 @@ export default {
 </script>
 
 <style lang="scss">
-
 .p-1 {
-  padding: 1em;
+    padding: 1em;
 }
 
-.menu-list li a:hover{
+.menu-list li a:hover {
     background-color: hsl(0, 0%, 14%);
     color: whitesmoke;
 }
-
 
 .sidebar-page {
     display: flex;
@@ -225,12 +231,12 @@ export default {
     }
 }
 
-
-
 // Dialog Modal
 .dialog {
-
-    .modal-card-head, .modal-card-body, .modal-card-foot, .modal-card-title{
+    .modal-card-head,
+    .modal-card-body,
+    .modal-card-foot,
+    .modal-card-title {
         background-color: hsl(0, 0%, 14%);
         color: whitesmoke;
         border: none;
@@ -241,32 +247,27 @@ export default {
         margin: auto;
     }
 
-    .modal-card-foot .button:last-child{
+    .modal-card-foot .button:last-child {
         background-color: hsl(0, 0%, 21%);
         border: none;
         box-shadow: none !important;
         color: whitesmoke;
     }
 
-    .modal-card-foot .button:last-child:hover{
+    .modal-card-foot .button:last-child:hover {
         background-color: hsl(0, 0%, 14%);
         border: none;
     }
 
-    .modal-card-foot .button:first-child{
+    .modal-card-foot .button:first-child {
         background-color: hsl(0, 0%, 14%);
         border: none;
         box-shadow: none !important;
         color: whitesmoke;
     }
 
-    .modal-card-body i{
+    .modal-card-body i {
         color: whitesmoke;
     }
-   
 }
-
-
-
-
 </style>

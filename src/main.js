@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router.js'
 import { store } from "./store/store";
-export const EventBus = new Vue(); 
+export const EventBus = new Vue();
 
 // import '@fortawesome/fontawesome-free/css/all.css';
 // import '@fortawesome/fontawesome-free/js/all.js';
@@ -31,9 +31,14 @@ import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css'
 Vue.use(Prism)
 
-import VuePrismEditor from "vue-prism-editor";
-import "vue-prism-editor/dist/VuePrismEditor.css";
-Vue.component("prism-editor", VuePrismEditor);
+// import VuePrismEditor from "vue-prism-editor";
+// // import "vue-prism-editor/dist/VuePrismEditor.css";
+// import 'vue-prism-editor/dist/prismeditor.min.css';
+// Vue.component("prism-editor", VuePrismEditor);
+
+import { PrismEditor } from 'vue-prism-editor';
+import 'vue-prism-editor/dist/prismeditor.min.css'; // import the styles
+Vue.component('PrismEditor', PrismEditor);
 
 import VueCodemirror from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -61,6 +66,9 @@ Vue.use(PerfectScrollbar);
 import VueSimplemde from 'vue-simplemde';
 import 'simplemde/dist/simplemde.min.css';
 Vue.component('vue-simplemde', VueSimplemde);
+
+import { HollowDotsSpinner } from 'epic-spinners';
+Vue.component('HollowDotsSpinner', HollowDotsSpinner);
 
 
 Vue.config.productionTip = false

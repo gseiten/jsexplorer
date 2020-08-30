@@ -1,21 +1,28 @@
 
 <template>
-
     <div class="main-container">
         <div class="main-content">
-            <div class="card" v-for="(item, index) in articles" :key="index">
-                <div class="card-content">
-                    <p class="title is-4">
-                        {{ item }}
-                    </p>
-                    <p class="subtitle">
-                        Gseiten
-                    </p>
+            <div class="spinner" v-if="isSpinnerActive">
+                <hollow-dots-spinner
+                    :animation-duration="1000"
+                    :dot-size="15"
+                    :dots-num="3"
+                    color="#fff"
+                />
+            </div>
+            <div class="article-container">
+                <div
+                    class="article-content has-background-black-ter"
+                    v-for="(item, index) in articles"
+                    :key="index"
+                    @click="goToArticle(item.url)"
+                >
+                    <img :src="item.urlToImage" alt />
+                    <p class="title is-4 has-text-light" v-html="item.title"></p>
                 </div>
             </div>
         </div>
     </div>
-    
 </template>
 
 <script>
@@ -24,57 +31,88 @@ import axios from 'axios';
 
 export default {
     name: 'resources',
-    components: {},
+    components: { },
     data(){
         return{
-            articles: []
+            articles: [],
+            isSpinnerActive: false,
+            newsApiKey: '3e30fc4ba5fb4a738dbc7687e1704ece',
+            newsURL: 'http://newsapi.org/v2/everything'
         }
     },
-    methods:{},
-    created(){
-        axios.get('http://api.icndb.com/jokes/random/50').then(response => {
-			response.data.value.forEach(element => {
-				this.articles.push(element.joke);
-			});
-		}).catch(error => {
-			this.$buefy.snackbar.open({message: error, type: 'is-danger'})
-		}).then(() => {});
+    methods:{
+        fetchArticles: function(){
+            this.isSpinnerActive = true;
+            let params = {
+                'sources': 'TechCrunch',
+                'language': 'en',
+                'pageSize': 50,
+                'sortBy': 'popular',
+                'apiKey': this.newsApiKey
+            }
+            axios.get(this.newsURL, {'params': params}).then(response => {
+                console.log(response.data);
+                response.data.articles.forEach(el => {
+                    this.articles.push(el);
+                })
+            }).catch(error => {
+                this.$buefy.snackbar.open({message: error, type: 'is-danger'})
+            }).then(() => {
+                this.isSpinnerActive = false;
+            });
+        },
+        goToArticle(url){
+            window.open(url ,'_blank');
+        }
     },
+    created(){
+        this.fetchArticles();
+    },
+
+
+
 }
 </script>
 
 <style lang="css" scoped>
-
-.main-container .level{
-    margin: 0 22px;
-    color: whitesmoke;
-    background-color: teal;
+.main-content {
+    margin: 0 2em 0 0;
 }
 
-@media(min-width: 768px){
-    .main-content{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content:center;
-        /* align-content: stretch; */
+.article-container {
+    width: 100%;
+    margin: 0 10px;
+    columns: 4;
+    column-gap: 10px;
+}
+.article-content {
+    width: 100%;
+    margin: 0 0 10px;
+    padding: 20px;
+    overflow: hidden;
+    break-inside: avoid;
+}
+.article-content:hover {
+    background-color: hsl(0, 0%, 7%) !important;
+}
+.article-content p {
+    margin-top: 10px;
+}
+
+@media (max-width: 1200px) {
+    .article-container {
+        columns: 3;
     }
 }
 
-::v-deep .card{
-    flex-basis: 19%;
-    margin: 5px;
-    background-color: hsl(0,0%,14%);
-    color: whitesmoke;
+@media (max-width: 768px) {
+    .article-container {
+        columns: 2;
+    }
 }
-
-::v-deep .card:hover{
-    background-color: hsl(0,0%,7%);
+@media (max-width: 480px) {
+    .article-container {
+        columns: 1;
+    }
 }
-
-::v-deep p{
-    color: whitesmoke;
-}
-
-
 </style>

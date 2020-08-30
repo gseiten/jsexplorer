@@ -3,7 +3,11 @@
         <article class="media profile-banner">
             <figure class="media-left">
                 <p class="image is-128x128">
-                    <img v-if="loggedInUser.thumbnail" :src="loggedInUser.thumbnail" />
+                    <img
+                        v-if="loggedInUser.thumbnail"
+                        :src="loggedInUser.thumbnail"
+                        referrerpolicy="no-referrer"
+                    />
                     <img v-else :src="profilepicture" />
                 </p>
                 <b-upload
@@ -60,12 +64,21 @@
                 <template slot="header">
                     <span>Your Projects</span>
                 </template>
-                <div class="list profile-list">
+                <div class="spinner" v-if="isSpinnerActive">
+                    <hollow-dots-spinner
+                        :animation-duration="1000"
+                        :dot-size="15"
+                        :dots-num="3"
+                        color="#fff"
+                    />
+                </div>
+                <div class="profile-content">
                     <div
                         class="list-item"
                         v-for="(item, index) in your_projects"
                         :key="index"
-                    >{{ item }}</div>
+                        v-html="item"
+                    ></div>
                 </div>
             </b-tab-item>
 
@@ -73,12 +86,13 @@
                 <template slot="header">
                     <span>Saved Articles</span>
                 </template>
-                <div class="list profile-list">
+                <div class="profile-content">
                     <div
                         class="list-item"
                         v-for="(item, index) in saved_articles"
                         :key="index"
-                    >{{ item }}</div>
+                        v-html="item"
+                    ></div>
                 </div>
             </b-tab-item>
 
@@ -86,12 +100,13 @@
                 <template slot="header">
                     <span>Questions Asked</span>
                 </template>
-                <div class="list profile-list">
+                <div class="profile-content">
                     <div
                         class="list-item"
                         v-for="(item, index) in questions_asked"
                         :key="index"
-                    >{{ item }}</div>
+                        v-html="item"
+                    ></div>
                 </div>
             </b-tab-item>
 
@@ -99,12 +114,13 @@
                 <template slot="header">
                     <span>Active Challenges</span>
                 </template>
-                <div class="list profile-list">
+                <div class="profile-content">
                     <div
                         class="list-item"
                         v-for="(item, index) in active_challenges"
                         :key="index"
-                    >{{ item }}</div>
+                        v-html="item"
+                    ></div>
                 </div>
             </b-tab-item>
         </b-tabs>
@@ -127,7 +143,8 @@ export default {
             active_challenges: [],
             profilepicture: "https://api.adorable.io/avatars/2",
             profilepicture_file: null,
-            is_content_editable: false
+            is_content_editable: false,
+            isSpinnerActive: false,
         };
     },
     methods: {
@@ -145,6 +162,7 @@ export default {
     },
 
     created() {
+        this.isSpinnerActive = true;
         axios
             .get("http://api.icndb.com/jokes/random/50")
             .then(response => {
@@ -160,7 +178,9 @@ export default {
                     type: "is-danger"
                 });
             })
-            .then(() => {});
+            .then(() => {
+                this.isSpinnerActive = false;
+            });
     }
 };
 </script>
@@ -197,7 +217,7 @@ export default {
 }
 
 ::v-deep .b-tabs .tab-content {
-    padding: 0;
+    padding: 5px;
 }
 
 ::v-deep .b-tabs .tabs ul {
@@ -235,17 +255,22 @@ export default {
     font-weight: 200;
 }
 
-.profile-list {
+.profile-content {
     border-radius: 0%;
     background-color: hsl(0, 0%, 10%);
 }
 
-.profile-list .list-item {
+.profile-content .list-item {
+    padding: 7px;
     color: whitesmoke;
     border-bottom-color: hsl(0, 0%, 19%);
 }
 
-.profile-list .list-item:hover {
+.profile-content .list-item:hover {
     background-color: hsl(0, 0%, 14%);
+}
+
+.spinner {
+    padding: 10px;
 }
 </style>

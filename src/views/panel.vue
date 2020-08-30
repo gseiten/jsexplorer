@@ -1,7 +1,7 @@
 
 <template>
     <div class="main-class has-background-black-bis has-text-light">
-        <!-- // ! Left for Tabs  -->
+        <!-- // ! Left for tabs menu  -->
         <!-- <div class="level has-background-black-bis is-marginless">
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempora, optio!
         </div>-->
@@ -72,8 +72,8 @@
             </pane>
 
             <!-- PANE 2 (OUTPUT) -->
-            <pane class="resContainer" :size="outputPanelSize" min-size="10">
-                <nav class="level has-background-black-ter console_level">
+            <pane class="res-container" :size="outputPanelSize" min-size="10">
+                <nav class="level has-background-black-ter console-pane">
                     <div class="level-left">
                         <div class="level-item is-size-6">Output</div>
                     </div>
@@ -130,8 +130,8 @@
             </pane>
 
             <!-- PANE 3 (INFO) -->
-            <pane class="resContainer" v-if="isAnalysisOn" :size="analysisPanelSize" min-size="10">
-                <nav class="level has-background-black-ter console_level">
+            <pane class="res-container" v-if="isAnalysisOn" :size="analysisPanelSize" min-size="10">
+                <nav class="level has-background-black-ter analytics-pane">
                     <div class="level-left">
                         <div class="level-item is-size-6">Analysis</div>
                     </div>
@@ -160,7 +160,7 @@
                 </nav>
 
                 <b-collapse
-                    class="card has-background-black-ter has-text-light"
+                    class="card has-background-black-bis has-text-light"
                     animation="slide"
                     v-for="(cr, index) of complexity_report"
                     :key="index"
@@ -185,7 +185,7 @@
                             <span class="has-text-warning">cyclomatic complexity</span> score of
                             <strong class="has-text-light">{{ cr.data.cyclomatic }}</strong>
                             and
-                            <span class="has-text-warning">density</span>
+                            <span class="has-text-warning">density</span> of
                             <strong class="has-text-light">{{ cr.data.cyclomaticDensity }}</strong>.
                             <br />There are a total of
                             <strong class="has-text-light">{{ cr.data.lines }}</strong>
@@ -312,20 +312,30 @@ export default {
                     { headers: { "Content-Type": "application/json" } }
                 )
                 .then(response => {
-                    if (response.data.result != "") {
-                        this.result.push(response.data.result);
-                    }
-                    this.error = response.data.error;
+                    
+                    console.log(response.data);
 
-                    this.fileInfo = []; // reset fileInfo for every code execution.
-                    if (response.data.fileInfo) {
-                        this.fileInfo = response.data.fileInfo;
+                    let result = response.data;
+                    if(result.modules){
+                        alert(result);
+                    } else if(result.result) {
+                        if (result.result != "") {
+                            this.result.push(result.result);
+                        }
+                        this.error = result.error;
+
+                        this.fileInfo = []; // reset fileInfo for every code execution.
+                        if (result.fileInfo) {
+                            this.fileInfo = result.fileInfo;
+                        }
+
+                        this.complexity_report = [];
+                        if (result.complexityReport) {
+                            this.complexity_report = result["complexityReport"];
+                        }
                     }
 
-                    this.complexity_report = [];
-                    if (response.data.complexityReport) {
-                        this.complexity_report = response.data["complexityReport"];
-                    }
+
                 })
                 .catch(error => {
                     this.$buefy.snackbar.open({
@@ -346,7 +356,7 @@ export default {
         },
 
         scrollToEnd: function() {
-            var container = document.querySelector(".resContainer");
+            var container = document.querySelector(".res-container");
             var scrollHeight = container.scrollHeight;
             container.scrollTop = scrollHeight;
         }
@@ -371,8 +381,8 @@ export default {
     },
 
     computed: {
-        // * two-way computed property with a setter.
         code: {
+            // * two-way computed property with a setter.
             get() {
                 return this.$store.getters["code"];
             },
@@ -426,6 +436,7 @@ export default {
 
 .list .list-item {
     border-radius: 0% !important;
+    padding: 5px;
 }
 .list .success-list-item {
     color: whitesmoke;
@@ -442,8 +453,12 @@ export default {
 }
 
 .analysisSwitch {
-    transform: scale(0.8);
+    transform: scale(0.7);
 }
+
+/* .analysisSwitch .check .is-light {
+    color: yellow !important;
+} */
 
 /* Buefy Collapse */
 a.card-header-icon {
@@ -474,16 +489,30 @@ a.card-header-icon {
     /* background: linear-gradient(0deg, #ccc, #111); */
 }
 
-.resContainer {
+.res-container {
     /* padding: 0.5em; */
     overflow-y: auto;
     height: 100%;
     white-space: pre-line;
 }
 
-.console_level {
+/* .console-pane {
     padding-left: 0.5em;
     margin-bottom: 0.2em !important;
+} */
+
+.console-pane,
+.analytics-pane {
+    position: sticky;
+    top: 0;
+    padding-left: 0.5em;
+    margin-bottom: 0.2em !important;
+}
+
+.editor-configs,
+.analytics-pane,
+.console-pane {
+    height: 30px;
 }
 
 /* editor configs */

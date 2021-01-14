@@ -235,6 +235,7 @@ export default {
         }
     },
     created() {
+        
         EventBus.$on("newpost", () => {
             this.openNewPostModal();
         });

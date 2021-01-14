@@ -24,8 +24,8 @@ import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
 Vue.use(Buefy);
 
-import VueSplit from 'vue-split-panel'
-Vue.use(VueSplit)
+// import VueSplit from 'vue-split-panel'
+// Vue.use(VueSplit)
 
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-okaidia.css'

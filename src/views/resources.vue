@@ -17,7 +17,7 @@
                     :key="index"
                     @click="goToArticle(item.url)"
                 >
-                    <img :src="item.urlToImage" alt />
+                    <img v-if="item.urlToImage" :src="item.urlToImage" alt />
                     <p class="title is-4 has-text-light" v-html="item.title"></p>
                 </div>
             </div>
@@ -47,14 +47,16 @@ export default {
                 'sources': 'TechCrunch',
                 'language': 'en',
                 'pageSize': 50,
-                'sortBy': 'popular',
+                'sortBy': 'publishedAt',
                 'apiKey': this.newsApiKey
             }
             axios.get(this.newsURL, {'params': params}).then(response => {
-                console.log(response.data);
-                response.data.articles.forEach(el => {
-                    this.articles.push(el);
-                })
+                this.articles = response.data.articles.filter((item, index, self) =>
+                    index === self.findIndex((el) => (
+                        el.title === item.title && el.description == item.description
+                    ))
+                )
+                // console.log(response.data.articles);
             }).catch(error => {
                 this.$buefy.snackbar.open({message: error, type: 'is-danger'})
             }).then(() => {
@@ -95,8 +97,8 @@ export default {
 .article-content:hover {
     background-color: hsl(0, 0%, 7%) !important;
 }
-.article-content p {
-    margin-top: 10px;
+.article-content img {
+    margin-bottom: 10px;
 }
 
 @media (max-width: 1200px) {

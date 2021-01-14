@@ -25,29 +25,34 @@
                 </a>
             </div>
 
-            <div
-                class="navbar-menu has-background-black-ter"
-                id="navbarExampleTransparentExample"
-                :class="{'is-active': isBurgerOpen}"
-            >
-                <div class="navbar-start">
-                    <a class="navbar-item has-text-light" href="#">Home</a>
-                    <div class="navbar-item has-dropdown is-hoverable">
-                        <a class="navbar-link has-text-light" href="#">Features</a>
+            <div class="navbar-start">
+                <a class="navbar-item">Home</a>
+
+                <a class="navbar-item">Documentation</a>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">More</a>
+
+                    <div class="navbar-dropdown">
+                        <a class="navbar-item">About</a>
+                        <a class="navbar-item">Jobs</a>
+                        <a class="navbar-item">Contact</a>
+                        <hr class="navbar-divider" />
+                        <a class="navbar-item">Report an issue</a>
                     </div>
                 </div>
-                <div class="navbar-end">
-                    <div class="navbar-item">
-                        <div class="field is-grouped">
-                            <p class="control">
-                                <a class="button is-dark start-button" @click="openNewPostModal">
-                                    <span class="icon">
-                                        <i class="fas fa-plus"></i>
-                                    </span>
-                                    <span>Start</span>
-                                </a>
-                            </p>
-                        </div>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="field is-grouped">
+                        <p class="control">
+                            <a class="button is-dark start-button" @click="openNewPostModal">
+                                <span class="icon">
+                                    <i class="fas fa-plus"></i>
+                                </span>
+                                <span>Start</span>
+                            </a>
+                        </p>
                     </div>
                 </div>
             </div>

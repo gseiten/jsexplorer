@@ -15,6 +15,10 @@ import forum from './views/forum.vue';
 Vue.use(Router);
 
 const router = new Router({
+
+
+    mode: "history",
+
     routes: [
 
         {

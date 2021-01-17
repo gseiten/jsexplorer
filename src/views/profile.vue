@@ -164,7 +164,7 @@ export default {
     created() {
         this.isSpinnerActive = true;
         axios
-            .get("http://api.icndb.com/jokes/random/50")
+            .get("https://api.icndb.com/jokes/random/50")
             .then(response => {
                 let jokes = [];
                 response.data.value.forEach(element => {

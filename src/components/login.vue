@@ -25,16 +25,6 @@
     
                 <div class="buttons is-block">
 
-                    <a
-                        class="button github-button has-background-dark is-fullwidth"
-                        href="/api/auth/github"   
-                    >
-                        <span class="icon">
-                            <i class="fab fa-github has-text-white"></i>
-                        </span>
-                        <span class="has-text-white">GitHub</span>
-                    </a>
-
                     <a 
                         class="button google-button is-fullwidth"
                         href="/api/auth/google"
@@ -43,6 +33,16 @@
                             <i class="fab fa-google has-text-white"></i>
                         </span>
                         <span class="has-text-white">Google</span>
+                    </a>
+
+                    <a
+                        class="button github-button has-background-dark is-fullwidth"
+                        href="/api/auth/github"   
+                    >
+                        <span class="icon">
+                            <i class="fab fa-github has-text-white"></i>
+                        </span>
+                        <span class="has-text-white">GitHub</span>
                     </a>
 
                 </div>

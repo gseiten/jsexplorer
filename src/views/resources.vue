@@ -37,7 +37,7 @@ export default {
             articles: [],
             isSpinnerActive: false,
             newsApiKey: '3e30fc4ba5fb4a738dbc7687e1704ece',
-            newsURL: 'http://newsapi.org/v2/everything'
+            newsURL: 'https://newsapi.org/v2/everything'
         }
     },
     methods:{

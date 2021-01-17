@@ -16,8 +16,8 @@
                     aria-label="menu"
                     aria-expanded="false"
                     data-target="navbarBasicExample"
-                    :class="{'is-active': isBurgerOpen}"
-                    @click="isBurgerOpen = !isBurgerOpen"
+                    :class="{'is-active': is_hamburger_active}"
+                    @click="is_hamburger_active = !is_hamburger_active"
                 >
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -25,7 +25,9 @@
                 </a>
             </div>
 
-            <div class="navbar-start">
+
+            <!-- <div id="navbarBasicExample" class="navbar-menu has-background-black-ter" :class="{'is-active': is_hamburger_active}"> -->
+            <div class="navbar-start"  >
                 <a class="navbar-item">Home</a>
 
                 <a class="navbar-item">Documentation</a>
@@ -56,6 +58,9 @@
                     </div>
                 </div>
             </div>
+            <!-- </div> -->
+
+
         </nav>
 
         <div class="container" style>
@@ -110,7 +115,7 @@
         },
 		data() {
 			return {
-				isBurgerOpen: false,
+				is_hamburger_active: false,
 				is_login_modal_open: false,
 			}
 		},
@@ -126,5 +131,5 @@
     }
 </script>
 
-<style>
+<style scoped>
 </style>

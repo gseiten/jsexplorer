@@ -7,7 +7,7 @@
                     <img
                         src="../assets/kludge1.png"
                         alt="Kludge"
-                        style="width:50px; min-height:50px"
+                        style="width: 50px; min-height: 50px"
                     />
                 </a>
                 <a
@@ -16,7 +16,7 @@
                     aria-label="menu"
                     aria-expanded="false"
                     data-target="navbarBasicExample"
-                    :class="{'is-active': is_hamburger_active}"
+                    :class="{ 'is-active': is_hamburger_active }"
                     @click="is_hamburger_active = !is_hamburger_active"
                 >
                     <span aria-hidden="true"></span>
@@ -25,9 +25,8 @@
                 </a>
             </div>
 
-
             <!-- <div id="navbarBasicExample" class="navbar-menu has-background-black-ter" :class="{'is-active': is_hamburger_active}"> -->
-            <div class="navbar-start"  >
+            <div class="navbar-start">
                 <a class="navbar-item">Home</a>
 
                 <a class="navbar-item">Documentation</a>
@@ -48,7 +47,10 @@
                 <div class="navbar-item">
                     <div class="field is-grouped">
                         <p class="control">
-                            <a class="button is-dark start-button" @click="openNewPostModal">
+                            <a
+                                class="button is-dark start-button"
+                                @click="openNewPostModal"
+                            >
                                 <span class="icon">
                                     <i class="fas fa-plus"></i>
                                 </span>
@@ -59,23 +61,27 @@
                 </div>
             </div>
             <!-- </div> -->
-
-
         </nav>
 
         <div class="container" style>
             <div class="columns">
                 <div class="column is-4">
-                    <section class="hero has-background-black-ter is-fullheight">
+                    <section
+                        class="hero has-background-black-ter is-fullheight"
+                    >
                         <div class="hero-body">
                             <div class="container">
                                 <div class="is-pulled-right">
-                                    <h1
-                                        class="title has-text-light is-1"
-                                    >Learn, Build & Debug Code the right way.</h1>
+                                    <h1 class="title has-text-light is-1">
+                                        Learn, Build & Debug Code the right way.
+                                    </h1>
                                     <h2
                                         class="subtitle has-text-grey-light is-4"
-                                    >Visualize execution, analyze performance, debug code snippets and much more.</h2>
+                                    >
+                                        Visualize execution, analyze
+                                        performance, debug code snippets and
+                                        much more.
+                                    </h2>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +89,9 @@
                 </div>
 
                 <div class="column">
-                    <section class="hero has-background-black-ter has-text-light is-fullheight">
+                    <section
+                        class="hero has-background-black-ter has-text-light is-fullheight"
+                    >
                         <div class="hero-body">
                             <div class="container">
                                 <figure class="image">
@@ -104,9 +112,11 @@
     </div>
 </template>
 
+
 <script>
 
-	import loginModal from '../components/login'
+    // @ is alias for /src
+	import loginModal from '@/components/login'
 
     export default {
         name: "landing",

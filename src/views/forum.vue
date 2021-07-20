@@ -67,14 +67,17 @@
                     </template>
                 </b-table-column>
 
-                <template slot="empty" v-if="table_data">
-                    <section class="section">
+                <template slot="empty">
+                    <section class="section" v-if="table_data">
                         <div class="content has-text-grey has-text-centered">
                             <p>
                                 <b-icon icon="emoticon-sad" size="is-large"></b-icon>
                             </p>
                             <p>Nothing here.</p>
                         </div>
+                    </section>
+                    <section v-else>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat officia libero consectetur et amet, veniam, vel optio recusandae aliquam nihil unde. Ipsa labore totam nam tempora dolor, dicta iusto qui.
                     </section>
                 </template>
             </b-table>
@@ -277,6 +280,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
 .main_container {
     height: 100%;
     overflow-y: auto;

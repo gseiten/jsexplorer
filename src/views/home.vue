@@ -158,7 +158,7 @@
                                 custom-class="has-background-black-ter has-text-light search-input"
                                 placeholder="Search..."
                                 type="search"
-                                icon="magnify"
+                                icon="search"
                             ></b-input>
                         </b-field>
                     </div>

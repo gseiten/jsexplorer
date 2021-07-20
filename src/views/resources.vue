@@ -28,10 +28,13 @@
 <script>
 
 import axios from 'axios'; 
+import { HollowDotsSpinner } from 'epic-spinners';
 
 export default {
     name: 'resources',
-    components: { },
+    components: { 
+        HollowDotsSpinner
+    },
     data(){
         return{
             articles: [],

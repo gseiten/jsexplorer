@@ -26,36 +26,69 @@
                     <b-menu class="is-custom-mobile">
                         <b-menu-list label="Menu">
                             <b-menu-item
-                                icon="account"
+                                icon="user"
                                 label="My Profile"
-                                :active="this.$store.getters.selectedMenuOption == 'profile' ? true : false"
+                                :active="
+                                    this.$store.getters.selectedMenuOption ==
+                                    'profile'
+                                        ? true
+                                        : false
+                                "
                                 @click="changeRoute('profile')"
                             ></b-menu-item>
 
                             <b-menu-item
-                                icon="code-tags"
+                                icon="code"
                                 label="Code Editor"
-                                :active="this.$store.getters.selectedMenuOption == 'panel' ? true : false"
+                                :active="
+                                    this.$store.getters.selectedMenuOption ==
+                                    'panel'
+                                        ? true
+                                        : false
+                                "
                                 @click="changeRoute('panel')"
                             ></b-menu-item>
 
                             <b-menu-item
                                 icon="book"
                                 label="Learn Programming"
-                                :active="this.$store.getters.selectedMenuOption == 'resources' ? true : false"
+                                :active="
+                                    this.$store.getters.selectedMenuOption ==
+                                    'resources'
+                                        ? true
+                                        : false
+                                "
                                 @click="changeRoute('resources')"
                             ></b-menu-item>
 
-                            <b-menu-item icon="shield-account" label="Administrator">
-                                <b-menu-item icon="account" label="Users"></b-menu-item>
-                                <b-menu-item icon="cellphone-link" label="Devices"></b-menu-item>
-                                <b-menu-item icon="cash-multiple" label="Payments" disabled></b-menu-item>
+                            <b-menu-item
+                                icon="user-shield"
+                                label="Administrator"
+                            >
+                                <b-menu-item
+                                    icon="users"
+                                    label="Users"
+                                ></b-menu-item>
+                                <b-menu-item
+                                    icon="tablet-alt"
+                                    label="Devices"
+                                ></b-menu-item>
+                                <b-menu-item
+                                    icon="coins"
+                                    label="Payments"
+                                    disabled
+                                ></b-menu-item>
                             </b-menu-item>
 
                             <b-menu-item
-                                icon="forum"
+                                icon="comments"
                                 label="Public Space"
-                                :active="this.$store.getters.selectedMenuOption == 'forum' ? true : false"
+                                :active="
+                                    this.$store.getters.selectedMenuOption ==
+                                    'forum'
+                                        ? true
+                                        : false
+                                "
                                 @click="changeRoute('forum')"
                             ></b-menu-item>
                         </b-menu-list>
@@ -63,7 +96,11 @@
                             <b-menu-item label="Expo" icon="link"></b-menu-item>
                         </b-menu-list>
                         <b-menu-list label="Actions">
-                            <b-menu-item @click="logoutUser" icon="logout" label="Logout"></b-menu-item>
+                            <b-menu-item
+                                @click="logoutUser"
+                                icon="sign-out-alt"
+                                label="Logout"
+                            ></b-menu-item>
                         </b-menu-list>
                         <b-menu-list label="Misc.">
                             <b-menu-item icon="rss" label="Blog"></b-menu-item>

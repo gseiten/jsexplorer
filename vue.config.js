@@ -3,7 +3,9 @@
 // }
 
 
+// npm remove @vue/cli-plugin-eslint or lintOnSave: false
 
 module.exports = {
-  publicPath: ''
+  publicPath: '',
+  lintOnSave: false
 }

@@ -128,11 +128,15 @@
 </template>
 
 <script>
+
 import axios from "axios";
+import { HollowDotsSpinner } from 'epic-spinners';
 
 export default {
     name: "profile",
-    components: {},
+    components: {
+        HollowDotsSpinner
+    },
     data() {
         return {
             loggedInUser: this.$store.getters.loggedInUser,
